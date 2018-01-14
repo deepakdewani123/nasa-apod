@@ -1,0 +1,39 @@
+<!--
+  Generated template for the TodayPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Today</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div *ngIf="!nasaData.loaded" class="placeholder">
+    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded">
+    <!-- <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" /> -->
+    <p class="date_placeholder animated-background"></p>
+    <!-- <p class="copyright_placeholder animated-background"></p>
+    <h1 class="title_placeholder animated-background"></h1>
+    <p class="explanation_placeholder animated-background"></p> -->
+  </div>
+
+  <div *ngIf="nasaData.loaded">
+    <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
+    <!-- <div class="animated-background"></div> -->
+    <p class="base date">{{ nasaData.date }}</p>
+    <p class="base copyright">&#169; {{ nasaData.copyright }}</p>
+    <h1 class="base title">{{ nasaData.title }}</h1>
+    <p class="base explanation">{{ nasaData.explanation }}</p>
+  </div>
+
+
+
+</ion-content>

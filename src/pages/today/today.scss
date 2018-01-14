@@ -1,0 +1,94 @@
+page-today {
+  // .toolbar-background-ios,
+  // .toolbar-background-md {
+  //   background: #1a1a1a;
+  // }
+
+  .scroll-content {
+    background: #181818;
+  }
+
+  ion-content {
+    p,
+    h1 {
+      margin: 0px;
+    }
+
+    @keyframes placeHolderShimmer {
+      0% {
+        background-position: -468px 0;
+      }
+      100% {
+        background-position: 468px 0;
+      }
+    }
+
+    .animated-background {
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-name: placeHolderShimmer;
+      animation-timing-function: linear;
+      background: #f6f7f8;
+      background: linear-gradient(
+        to right,
+        #eeeeee 8%,
+        #dddddd 18%,
+        #eeeeee 33%
+      );
+      background-size: 100px 100px;
+      height: 96px;
+      position: relative;
+    }
+
+    .placeholder {
+      .date_placeholder {
+        width: 70px;
+        height: 10px;
+        margin-left: 5px;
+        font-size: 10px;
+        padding: 0px 5px;
+        display: inline-block;
+        background: #fff;
+      }
+      .copyright_placeholder {
+        font-size: 8px;
+        display: inline-block;
+        padding: 5px 5px;
+        float: right;
+        background: #fff;
+      }
+      .title_placeholder {
+        width: 90%;
+        background: #fff;
+      }
+      .explanation_placeholder {
+        width: 90%;
+        background: #fff;
+      }
+    }
+
+    .base {
+      color: white;
+    }
+    .title {
+      padding: 10px;
+    }
+    .explanation {
+      padding: 10px;
+    }
+    .date {
+      width: 70px;
+      font-size: 10px;
+      padding: 0px 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    .copyright {
+      font-size: 8px;
+      display: inline-block;
+      padding: 5px 5px;
+      float: right;
+    }
+  }
+}
