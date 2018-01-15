@@ -39,12 +39,15 @@ export class ImageViewPage {
       // detect orientation changes
       this.screenOrientation.onChange().subscribe(() => {
         console.log("Orientation Changed");
-        if (this.screenOrientation.type === "landscape-primary") {
+        if (
+          this.screenOrientation.type === "landscape-primary" ||
+          this.screenOrientation.type === "landscape-secondary"
+        ) {
           this.isLandscape = true;
-          this.type = this.screenOrientation.type;
+          // this.type = this.screenOrientation.type;
         } else {
           this.isLandscape = false;
-          this.type = this.screenOrientation.type;
+          // this.type = this.screenOrientation.type;
         }
       });
     });

@@ -33,9 +33,6 @@ export class TodayPage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad TodayPage");
-    this.platform.ready().then(() => {
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-    });
     this.dataService.getTodayData(false).subscribe(
       result => {
         // console.log(result);
@@ -58,6 +55,15 @@ export class TodayPage {
 
   ionViewWillEnter() {
     console.log("ionViewWillEnter TodayPage");
+    this.platform.ready().then(() => {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      // this.screenOrientation.lock(
+      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY
+      // );
+      // this.screenOrientation.lock(
+      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_SECONDARY
+      // );
+    });
   }
 
   openImageView() {
