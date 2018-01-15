@@ -16,15 +16,15 @@
 <ion-content>
   <div *ngIf="!nasaData.loaded" class="placeholder">
     <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded">
-    <!-- <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" /> -->
-    <p class="date_placeholder animated-background"></p>
+    <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    <!-- <p class="date_placeholder animated-background"></p> -->
     <!-- <p class="copyright_placeholder animated-background"></p>
     <h1 class="title_placeholder animated-background"></h1>
     <p class="explanation_placeholder animated-background"></p> -->
   </div>
 
   <div *ngIf="nasaData.loaded">
-    <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    <img *ngIf="nasaData.loaded" [src]="nasaData.url" (load)="nasaData.loaded = true" (click)="openImageView()" />
     <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
     <!-- <div class="animated-background"></div> -->

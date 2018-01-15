@@ -33,7 +33,7 @@ export class DataService {
 
     return this.http.get<DataResponse>(url).map(
       data => {
-        console.log(data.hdurl);
+        // console.log(data.hdurl);
         return data;
       },
       (err: HttpErrorResponse) => {
