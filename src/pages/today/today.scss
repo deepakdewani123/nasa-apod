@@ -68,6 +68,24 @@ page-today {
       }
     }
 
+    .today_image {
+      img {
+        width: 100%;
+        border: 0;
+        max-height: 200px;
+      }
+    }
+
+    .copyright_parent {
+      display: inline-block;
+      float: right;
+      .copyright {
+        font-size: 8px;
+        display: inline-block;
+        padding: 3px 5px;
+        vertical-align: middle;
+      }
+    }
     .base {
       color: white;
     }
@@ -78,17 +96,11 @@ page-today {
       padding: 10px;
     }
     .date {
-      width: 70px;
+      // width: 70px;
       font-size: 10px;
       padding: 0px 5px;
       display: inline-block;
       font-weight: bold;
-    }
-    .copyright {
-      font-size: 8px;
-      display: inline-block;
-      padding: 5px 5px;
-      float: right;
     }
   }
 }

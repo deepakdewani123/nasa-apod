@@ -56,7 +56,7 @@ export class TodayPage {
   ionViewWillEnter() {
     console.log("ionViewWillEnter TodayPage");
     this.platform.ready().then(() => {
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       // this.screenOrientation.lock(
       //   this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY
       // );
@@ -70,7 +70,9 @@ export class TodayPage {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        imageUrl: this.nasaData.hdurl
+        imageUrl: this.nasaData.hdurl,
+        date: this.nasaData.date,
+        title: this.nasaData.title
       },
       {
         // enterAnimation: "modal-scale-up-enter",

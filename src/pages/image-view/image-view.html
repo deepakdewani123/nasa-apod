@@ -1,28 +1,28 @@
-<!--
-  Generated template for the ImageViewPage page.
+<ion-header no-border>
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar color="dark">
+  <ion-navbar>
     <ion-buttons start>
       <button (click)="dismiss()" ion-button icon-only>
-        <ion-icon name="close"></ion-icon>
+        <ion-icon color="light" name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Image View</ion-title>
+    <ion-title>{{ todayDate | date: 'mediumDate' }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content>
-  <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="loaded">
-  <img [src]="hdurl" [ngClass]="{'landscape': isLandscape, 'portrait': !isLandscape}" (load)="loaded = true" [hidden]="!loaded"
-  />
+<ion-content no-bounce>
+  <!-- <div class="close_button">
+    <ion-icon name="close"></ion-icon>
+  </div> -->
+  <div class="view_image">
+    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="loaded">
+    <img [src]="hdurl" [ngClass]="{'landscape': isLandscape, 'portrait': !isLandscape}" (load)="loaded = true" [hidden]="!loaded"
+    />
+  </div>
 
-  <!-- <h1 style="color: white">{{ isLandscape }}</h1>
-  <h1 style="color: white">{{ type }}</h1> -->
+  <div class="title">
+    <h4>{{ title }}</h4>
+  </div>
 </ion-content>

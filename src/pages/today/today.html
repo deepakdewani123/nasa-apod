@@ -24,12 +24,20 @@
   </div>
 
   <div *ngIf="nasaData.loaded">
-    <img *ngIf="nasaData.loaded" [src]="nasaData.url" (load)="nasaData.loaded = true" (click)="openImageView()" />
-    <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    <div class="today_image">
+      <img *ngIf="nasaData.loaded" [src]="nasaData.url" (load)="nasaData.loaded = true" (click)="openImageView()" />
+      <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+    </div>
+
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
     <!-- <div class="animated-background"></div> -->
-    <p class="base date">{{ nasaData.date }}</p>
-    <p class="base copyright">&#169; {{ nasaData.copyright }}</p>
+    <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>
+    <div class="copyright_parent">
+      <span *ngIf="nasaData.copyright !== ''" class="base">&#169;</span>
+      <p class="base copyright">
+        {{ nasaData.copyright }}
+      </p>
+    </div>
     <h1 class="base title">{{ nasaData.title }}</h1>
     <p class="base explanation">{{ nasaData.explanation }}</p>
   </div>

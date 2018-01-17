@@ -13,6 +13,8 @@ export class ImageViewPage {
   loaded: boolean;
   isLandscape: boolean;
   type: string;
+  todayDate: string;
+  title: string;
 
   constructor(
     public navCtrl: NavController,
@@ -25,6 +27,12 @@ export class ImageViewPage {
         ? ""
         : this.navParams.get("imageUrl");
 
+    this.todayDate =
+      this.navParams.get("date") == null ? "" : this.navParams.get("date");
+
+    this.title =
+      this.navParams.get("title") == null ? "" : this.navParams.get("title");
+
     this.loaded = false;
     this.isLandscape = false;
     this.type = "portrait";
@@ -34,7 +42,7 @@ export class ImageViewPage {
     console.log("ionViewDidLoad ImageViewPage");
     // allow user rotate
     this.platform.ready().then(() => {
-      this.screenOrientation.unlock();
+      // this.screenOrientation.unlock();
 
       // detect orientation changes
       this.screenOrientation.onChange().subscribe(() => {
