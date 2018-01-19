@@ -22,17 +22,43 @@ import { File } from "@ionic-native/file";
 import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from "@angular/animations";
+
 declare var cordova: any;
 
 @IonicPage()
 @Component({
   selector: "page-today",
-  templateUrl: "today.html"
+  templateUrl: "today.html",
+  animations: [
+    trigger("visibility", [
+      state(
+        "shown",
+        style({
+          top: "0px"
+        })
+      ),
+      state(
+        "hidden",
+        style({
+          top: "-70px"
+        })
+      ),
+      transition("shown <=> hidden", animate(".2s .7s"))
+    ])
+  ]
 })
 export class TodayPage {
   nasaData: NasaData;
   platformName: string;
   savedImageUrl: string;
+  visibility: string;
 
   constructor(
     public navCtrl: NavController,
@@ -52,6 +78,7 @@ export class TodayPage {
     this.nasaData = new NasaData();
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
+    this.visibility = "hidden";
   }
 
   ionViewDidLoad() {
@@ -122,7 +149,28 @@ export class TodayPage {
 
   saveData(data: NasaData) {
     if (data.isSaved) {
-      this.presentToast("Already saved!");
+      // this.presentToast("Already saved!");
+      data.isSaved = false;
+      this.storage.get("dataArray").then((array: NasaData[]) => {
+        if (array) {
+          var index = array.findIndex(function(object) {
+            return object.title === data.title;
+          });
+          if (index !== -1) {
+            array.splice(index, 1);
+          }
+          this.storage.set("dataArray", array);
+        } else {
+          // var index = array.findIndex(function(object) {
+          //   return object.title === data.title;
+          // });
+          if (index !== -1) {
+            array.splice(index, 1);
+          }
+          this.storage.set("dataArray", array);
+        }
+        console.log(array);
+      });
     } else {
       this.storage.get("dataArray").then((array: NasaData[]) => {
         if (array) {
@@ -138,13 +186,14 @@ export class TodayPage {
           this.storage.set("dataArray", array);
         }
         console.log(array);
-
-        for (let i of array) {
-          console.log(i.title);
-        }
       });
     }
   }
+
+  tapEvent(e) {
+    this.visibility = this.visibility === "shown" ? "hidden" : "shown";
+  }
+
   // Copy the image to a local folder
   // private copyFileToLocalDir(namePath, currentName, newFileName) {
   //   // this.lastImage = namePath;

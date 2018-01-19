@@ -1,14 +1,30 @@
-<!-- <ion-header no-border> -->
+<ion-header [@visibility]='visibility'>
+  <ion-navbar color="dark">
+    <!-- <ion-title>{{ nasaData.date | date: 'mediumDate' }}</ion-title> -->
+    <!-- <ion-buttons>
+      <button ion-button icon-only start>
+        <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
+        <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
+      </button>
+    </ion-buttons> -->
 
-<!-- <ion-navbar transparent> -->
-<!-- <ion-title>{{ nasaData.date | date: 'mediumDate' }}</ion-title> -->
-<!-- </ion-navbar> -->
-
-<!-- </ion-header> -->
+    <ion-buttons start>
+      <button ion-button icon-only (click)="saveData(nasaData)">
+        <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="shareImage()">
+        <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
+        <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
 
 <ion-content fullscreen="true">
-  <div class="share_button">
+  <!-- <div class="share_button">
     <button clear ion-button (click)="shareImage()">
       <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
       <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
@@ -19,7 +35,7 @@
       <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
       <ion-icon *ngIf="platformName === 'android'  && nasaData.imageLoaded" class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
     </button>
-  </div>
+  </div> -->
 
   <div *ngIf="!nasaData.imageLoaded" class="placeholder">
     <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.imageLoaded">
@@ -45,8 +61,8 @@
         {{ nasaData.copyright }}
       </p>
     </div>
-    <h1 class="base title">{{ nasaData.title }}</h1>
-    <p class="base explanation">{{ nasaData.explanation }}</p>
+    <h1 class="base title" (tap)="tapEvent($event)">{{ nasaData.title }}</h1>
+    <p class="base explanation" (tap)="tapEvent($event)">{{ nasaData.explanation }}</p>
   </div>
 
 
