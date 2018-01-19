@@ -28,14 +28,13 @@ export class DataService {
         this.baseURL +
         `hd=${highDefinition}&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg`;
     } else {
-      url =
-        this.baseURL +
-        "date=2018-01-11&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
+      url = this.baseURL + "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
     }
 
     return this.http.get<DataResponse>(url).map(
       data => {
         // console.log(data.hdurl);
+        console.log(data);
         return data;
       },
       (err: HttpErrorResponse) => {

@@ -1,0 +1,32 @@
+page-favorites {
+  .item-inner {
+    padding-right: 0px !important;
+  }
+  .label {
+    margin: 0;
+  }
+  .list-ios,
+  .list-md {
+    margin: 0px;
+  }
+  .card-ios,
+  .card-md {
+    margin: 12px 5px;
+    border-radius: 2px;
+    width: calc(100% - 10px);
+    font-size: 1.4rem;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .scroll-content {
+    background: #181818;
+  }
+  ion-content {
+    p,
+    h1 {
+      margin: 0px;
+    }
+  }
+}

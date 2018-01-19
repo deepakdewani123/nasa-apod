@@ -1,18 +1,18 @@
 <ion-header no-border>
 
-  <ion-navbar>
+  <ion-navbar transparent>
     <ion-buttons start>
-      <button (click)="dismiss()" ion-button icon-only>
+      <button [disabled]="visibility === 'hidden'" [@visibility]='visibility' (click)="dismiss()" ion-button icon-only>
         <ion-icon color="light" name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>{{ todayDate | date: 'mediumDate' }}</ion-title>
+    <!-- <ion-title>{{ title }}</ion-title> -->
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content no-bounce>
+<ion-content no-bounce fullscreen="true" (tap)="tapEvent($event)">
   <!-- <div class="close_button">
     <ion-icon name="close"></ion-icon>
   </div> -->
@@ -22,7 +22,7 @@
     />
   </div>
 
-  <div class="title">
+  <div [@visibility]='visibility' class="title">
     <h4>{{ title }}</h4>
   </div>
 </ion-content>

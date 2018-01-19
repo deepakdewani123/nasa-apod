@@ -1,33 +1,55 @@
-import { ImageViewPageModule } from "./../pages/image-view/image-view.module";
-import { ImageViewPage } from "./../pages/image-view/image-view";
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ErrorHandler, NgModule } from "@angular/core";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
-import { SplashScreen } from "@ionic-native/splash-screen";
-import { StatusBar } from "@ionic-native/status-bar";
 import { HttpClientModule } from "@angular/common/http";
-import { MyApp } from "./app.component";
-import { ScreenOrientation } from "@ionic-native/screen-orientation";
 
+import { MyApp } from "./app.component";
+import { ImageViewPageModule } from "./../pages/image-view/image-view.module";
+import { ImageViewPage } from "./../pages/image-view/image-view";
 import { TabsPage } from "../pages/tabs/tabs";
 import { SettingsPage } from "../pages/settings/settings";
+import { FavoritesPage } from "./../pages/favorites/favorites";
 import { TodayPage } from "../pages/today/today";
 import { DataService } from "../app/services/data.service";
+
+import { IonicStorageModule } from "@ionic/storage";
+import { ScreenOrientation } from "@ionic-native/screen-orientation";
+import { SocialSharing } from "@ionic-native/social-sharing";
+import { File } from "@ionic-native/file";
+import { FilePath } from "@ionic-native/file-path";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
+import { SplashScreen } from "@ionic-native/splash-screen";
+import { StatusBar } from "@ionic-native/status-bar";
+
 @NgModule({
-  declarations: [MyApp, TabsPage, TodayPage, SettingsPage],
+  declarations: [MyApp, TabsPage, TodayPage, FavoritesPage, SettingsPage],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     ImageViewPageModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, TabsPage, TodayPage, SettingsPage, ImageViewPage],
+  entryComponents: [
+    MyApp,
+    TabsPage,
+    TodayPage,
+    FavoritesPage,
+    SettingsPage,
+    ImageViewPage
+  ],
   providers: [
     StatusBar,
     SplashScreen,
     DataService,
     ScreenOrientation,
+    SocialSharing,
+    FileTransfer,
+    FilePath,
+    File,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

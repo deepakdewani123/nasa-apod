@@ -1,23 +1,24 @@
 page-image-view {
-  .toolbar-background-ios,
-  .toolbar-background-md {
-    background: #181818;
-  }
+  // .toolbar-background-ios,
+  // .toolbar-background-md {
+  //   background: #181818;
+  // }
 
   $toolbar-ios-title-text-color: white;
 
-  background: #181818;
+  // background: #181818;
   .scroll-content {
-    background: #181818;
+    // background: #181818;
+    background: black;
   }
 
   ion-content {
     background: #181818;
-    .close_button {
-      margin: 10px;
-      color: white;
-      font-size: 20px;
-    }
+    // .close_button {
+    //   margin: 10px;
+    //   color: white;
+    //   font-size: 20px;
+    // }
 
     .view_image {
       position: absolute;

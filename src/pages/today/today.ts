@@ -1,16 +1,28 @@
-import { ImageViewPage } from "./../image-view/image-view";
-import { Component } from "@angular/core";
-import { ScreenOrientation } from "@ionic-native/screen-orientation";
-import { Platform } from "ionic-angular";
-
 import {
   IonicPage,
   NavController,
   NavParams,
-  ModalController
+  ModalController,
+  Platform,
+  ToastController,
+  normalizeURL
 } from "ionic-angular";
+
+import { Component } from "@angular/core";
+
+import { ImageViewPage } from "./../image-view/image-view";
 import { DataService } from "../../app/services/data.service";
 import { NasaData } from "../../app/model/data.model";
+
+import { Storage } from "@ionic/storage";
+import { StatusBar } from "@ionic-native/status-bar";
+import { ScreenOrientation } from "@ionic-native/screen-orientation";
+import { SocialSharing } from "@ionic-native/social-sharing";
+import { File } from "@ionic-native/file";
+import { FilePath } from "@ionic-native/file-path";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
+
+declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -19,6 +31,8 @@ import { NasaData } from "../../app/model/data.model";
 })
 export class TodayPage {
   nasaData: NasaData;
+  platformName: string;
+  savedImageUrl: string;
 
   constructor(
     public navCtrl: NavController,
@@ -26,13 +40,24 @@ export class TodayPage {
     private dataService: DataService,
     private modalCtrl: ModalController,
     private screenOrientation: ScreenOrientation,
-    private platform: Platform
+    private platform: Platform,
+    private statusBar: StatusBar,
+    private socialSharing: SocialSharing,
+    public toastCtrl: ToastController,
+    private file: File,
+    private filePath: FilePath,
+    private transfer: FileTransfer,
+    private storage: Storage
   ) {
     this.nasaData = new NasaData();
+    this.platformName = this.platform.is("ios") === true ? "ios" : "android";
+    this.savedImageUrl = "";
   }
 
   ionViewDidLoad() {
+    this.storage.set("dataArray", []);
     console.log("ionViewDidLoad TodayPage");
+    this.statusBar.hide();
     this.dataService.getTodayData(false).subscribe(
       result => {
         // console.log(result);
@@ -43,9 +68,11 @@ export class TodayPage {
           copyright: result.copyright,
           url: result.url,
           hdurl: result.hdurl,
-          loaded: false,
-          isHDImage: false
+          imageLoaded: false,
+          isSaved: false,
+          localUrl: ""
         });
+        // this.download(result.url);
       },
       error => {
         console.log(error);
@@ -66,7 +93,7 @@ export class TodayPage {
     });
   }
 
-  openImageView() {
+  private openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
@@ -80,5 +107,83 @@ export class TodayPage {
       }
     );
     modal.present();
+  }
+
+  shareImage() {
+    this.socialSharing
+      .share("", "", this.savedImageUrl.replace("file://", ""), "")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(() => {
+        console.log("error");
+      });
+  }
+
+  saveData(data: NasaData) {
+    if (data.isSaved) {
+      this.presentToast("Already saved!");
+    } else {
+      this.storage.get("dataArray").then((array: NasaData[]) => {
+        if (array) {
+          data.isSaved = true;
+          data.localUrl = normalizeURL(this.savedImageUrl);
+          array.push(data);
+          this.storage.set("dataArray", array);
+        } else {
+          // array: NasaData[] = [];
+          data.isSaved = true;
+          data.localUrl = normalizeURL(this.savedImageUrl);
+          array.push(data);
+          this.storage.set("dataArray", array);
+        }
+        console.log(array);
+
+        for (let i of array) {
+          console.log(i.title);
+        }
+      });
+    }
+  }
+  // Copy the image to a local folder
+  // private copyFileToLocalDir(namePath, currentName, newFileName) {
+  //   // this.lastImage = namePath;
+  //   this.file
+  //     .copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName)
+  //     .then(
+  //       success => {
+  //         this.lastImage = normalizeURL(
+  //           cordova.file.dataDirectory + newFileName
+  //         );
+  //       },
+  //       error => {
+  //         this.presentToast("Error while storing file.");
+  //       }
+  //     );
+  // }
+
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: "top"
+    });
+    toast.present();
+  }
+
+  private download(url: string) {
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer
+      .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
+      .then(
+        entry => {
+          console.log("download complete: " + entry.toURL());
+          this.savedImageUrl = entry.toURL();
+          // this.presentToast(this.savedImageUrl);
+        },
+        error => {
+          // handle error
+        }
+      );
   }
 }

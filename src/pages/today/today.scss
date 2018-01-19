@@ -41,6 +41,24 @@ page-today {
       position: relative;
     }
 
+    .share_button {
+      position: absolute;
+      right: 0px;
+      top: 10px;
+      .share_icon {
+        font-size: 30px;
+      }
+    }
+
+    .fav_button {
+      position: absolute;
+      left: 0px;
+      top: 10px;
+      .fav_icon {
+        font-size: 30px;
+      }
+    }
+
     .placeholder {
       .date_placeholder {
         width: 70px;
@@ -72,7 +90,7 @@ page-today {
       img {
         width: 100%;
         border: 0;
-        max-height: 200px;
+        max-height: 300px;
       }
     }
 

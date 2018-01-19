@@ -5,8 +5,10 @@ export class NasaData {
   copyright: string;
   url: string;
   hdurl: string;
-  loaded: boolean;
-  isHDImage: boolean;
+  imageLoaded: boolean;
+  isSaved: boolean;
+  localUrl: string;
+
   constructor(obj?: any) {
     this.title = (obj && obj.title) || "";
     this.explanation = (obj && obj.explanation) || "";
@@ -14,7 +16,8 @@ export class NasaData {
     this.copyright = (obj && obj.copyright) || "";
     this.url = (obj && obj.url) || "";
     this.hdurl = (obj && obj.hdurl) || "";
-    this.loaded = (obj && obj.loaded) || false;
-    this.isHDImage = (obj && obj.isHDImage) || false;
+    this.imageLoaded = (obj && obj.imageLoaded) || false;
+    this.isSaved = (obj && obj.isSaved) || false;
+    this.localUrl = (obj && obj.localUrl) || "";
   }
 }

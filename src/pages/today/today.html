@@ -1,37 +1,44 @@
-<!--
-  Generated template for the TodayPage page.
+<!-- <ion-header no-border> -->
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
+<!-- <ion-navbar transparent> -->
+<!-- <ion-title>{{ nasaData.date | date: 'mediumDate' }}</ion-title> -->
+<!-- </ion-navbar> -->
 
-  <ion-navbar color="dark">
-    <ion-title>Today</ion-title>
-  </ion-navbar>
-
-</ion-header>
+<!-- </ion-header> -->
 
 
-<ion-content>
-  <div *ngIf="!nasaData.loaded" class="placeholder">
-    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded">
-    <img [src]="nasaData.url" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+<ion-content fullscreen="true">
+  <div class="share_button">
+    <button clear ion-button (click)="shareImage()">
+      <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
+      <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
+    </button>
+  </div>
+  <div class="fav_button">
+    <button clear ion-button (click)="saveData(nasaData)">
+      <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
+      <ion-icon *ngIf="platformName === 'android'  && nasaData.imageLoaded" class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
+    </button>
+  </div>
+
+  <div *ngIf="!nasaData.imageLoaded" class="placeholder">
+    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.imageLoaded">
+    <img [src]="nasaData.url" (load)="nasaData.imageLoaded = true" [hidden]="!nasaData.imageLoaded" />
     <!-- <p class="date_placeholder animated-background"></p> -->
     <!-- <p class="copyright_placeholder animated-background"></p>
     <h1 class="title_placeholder animated-background"></h1>
     <p class="explanation_placeholder animated-background"></p> -->
   </div>
 
-  <div *ngIf="nasaData.loaded">
+  <div *ngIf="nasaData.imageLoaded">
     <div class="today_image">
-      <img *ngIf="nasaData.loaded" [src]="nasaData.url" (load)="nasaData.loaded = true" (click)="openImageView()" />
-      <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" />
+      <img *ngIf="nasaData.imageLoaded" [src]="nasaData.url" (load)="nasaData.imageLoaded = true" (click)="openImageView()" />
+      <!-- <img *ngIf="nasaData.isHDImage" [src]="nasaData.hdurl" (load)="nasaData.loaded = true" [hidden]="!nasaData.loaded" /> -->
     </div>
 
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
     <!-- <div class="animated-background"></div> -->
-    <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>
+    <!-- <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p> -->
     <div class="copyright_parent">
       <span *ngIf="nasaData.copyright !== ''" class="base">&#169;</span>
       <p class="base copyright">

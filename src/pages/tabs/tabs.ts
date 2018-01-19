@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 
 import { SettingsPage } from "./../settings/settings";
 import { TodayPage } from "./../today/today";
+import { FavoritesPage } from "../favorites/favorites";
 
 // import { AboutPage } from '../about/about';
 // import { ContactPage } from '../contact/contact';
@@ -12,7 +13,8 @@ import { TodayPage } from "./../today/today";
 })
 export class TabsPage {
   tab1Root = TodayPage;
-  tab2Root = SettingsPage;
+  tab2Root = FavoritesPage;
+  tab3Root = SettingsPage;
 
   constructor() {}
 }
