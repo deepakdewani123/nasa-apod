@@ -1,17 +1,17 @@
 import { Component } from "@angular/core";
-import { Subject } from "rxjs/Subject";
+// import { Subject } from "rxjs/Subject";
 
 import { SettingsPage } from "./../settings/settings";
 import { TodayPage } from "./../today/today";
 import { FavoritesPage } from "../favorites/favorites";
 
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from "@angular/animations";
+// import {
+//   trigger,
+//   state,
+//   style,
+//   animate,
+//   transition
+// } from "@angular/animations";
 
 @Component({
   templateUrl: "tabs.html"

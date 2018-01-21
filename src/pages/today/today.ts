@@ -83,11 +83,10 @@ export class TodayPage {
 
   ionViewDidLoad() {
     this.storage.set("dataArray", []);
-    console.log("ionViewDidLoad TodayPage");
+    // console.log("ionViewDidLoad TodayPage");
     this.statusBar.hide();
     this.dataService.getTodayData(false).subscribe(
       result => {
-        // console.log(result);
         this.nasaData = new NasaData({
           title: result.title,
           explanation: result.explanation,
@@ -108,7 +107,7 @@ export class TodayPage {
   }
 
   ionViewWillEnter() {
-    console.log("ionViewWillEnter TodayPage");
+    // console.log("ionViewWillEnter TodayPage");
     this.platform.ready().then(() => {
       // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       // this.screenOrientation.lock(
@@ -147,7 +146,7 @@ export class TodayPage {
       });
   }
 
-  saveData(data: NasaData) {
+  favoriteData(data: NasaData) {
     if (data.isSaved) {
       // this.presentToast("Already saved!");
       data.isSaved = false;
@@ -169,13 +168,14 @@ export class TodayPage {
           }
           this.storage.set("dataArray", array);
         }
-        console.log(array);
+        // console.log(array);
       });
     } else {
       this.storage.get("dataArray").then((array: NasaData[]) => {
         if (array) {
           data.isSaved = true;
           data.localUrl = normalizeURL(this.savedImageUrl);
+          console.log(data.localUrl);
           array.push(data);
           this.storage.set("dataArray", array);
         } else {
@@ -185,10 +185,12 @@ export class TodayPage {
           array.push(data);
           this.storage.set("dataArray", array);
         }
-        console.log(array);
+        // console.log(array);
       });
     }
   }
+
+  search(date: string) {}
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
@@ -226,7 +228,7 @@ export class TodayPage {
       .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
       .then(
         entry => {
-          console.log("download complete: " + entry.toURL());
+          // console.log("download complete: " + entry.toURL());
           this.savedImageUrl = entry.toURL();
           // this.presentToast(this.savedImageUrl);
         },

@@ -15,11 +15,17 @@
   <ion-card *ngFor="let item of data">
     <div class="parent_div">
       <div class="image_div">
-        <img class="image" src="https://dummyimage.com/vga" alt="no image here">
+        <img class="image" [src]="item.url" alt="no image here">
       </div>
-      <div class="date">
+      <!-- <div class="date_title_div"> -->
+      <div class="date_div">
+        <p class="date">{{item.date | date: 'dd MMM'}}</p>
+      </div>
+      <div class="title_div">
+        <p class="title">{{item.title}}</p>
+      </div>
+      <!-- </div> -->
 
-      </div>
     </div>
 
   </ion-card>
