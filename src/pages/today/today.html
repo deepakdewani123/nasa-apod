@@ -12,7 +12,7 @@
       <button ion-button icon-only (click)="favoriteData(nasaData)">
         <ion-icon class="fav_icon" icon-only color="light" name="{{nasaData.isSaved ? 'heart' : 'heart-outline'}}"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="search(nasaData.date)">
+      <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon *ngIf="platformName === 'android'" class="fav_icon" icon-only color="light" name="calendar"></ion-icon>
         <ion-icon *ngIf="platformName === 'ios'" class="fav_icon" icon-only color="light" name="calendar-outline"></ion-icon>
       </button>

@@ -22,6 +22,7 @@ import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
+import { PopoverPage } from "../pages/popover/popover";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { StatusBar } from "@ionic-native/status-bar";
     TodayPage,
     RecentsPage,
     FavoritesPage,
-    SettingsPage
+    SettingsPage,
+    PopoverPage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,8 @@ import { StatusBar } from "@ionic-native/status-bar";
     RecentsPage,
     FavoritesPage,
     SettingsPage,
-    ImageViewPage
+    ImageViewPage,
+    PopoverPage
   ],
   providers: [
     StatusBar,

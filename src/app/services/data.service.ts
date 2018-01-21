@@ -21,15 +21,9 @@ export class DataService {
     this.baseURL = "https://api.nasa.gov/planetary/apod?";
   }
 
-  getTodayData(highDefinition: boolean) {
+  getTodayData() {
     let url: string;
-    if (highDefinition) {
-      url =
-        this.baseURL +
-        `hd=${highDefinition}&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg`;
-    } else {
-      url = this.baseURL + "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
-    }
+    url = this.baseURL + "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
 
     return this.http.get<DataResponse>(url).map(
       data => {
@@ -47,5 +41,25 @@ export class DataService {
     );
   }
 
-  getDataForDate(date: string) {}
+  getDataForDate(date: string) {
+    let url: string;
+    url =
+      this.baseURL +
+      `date=${date}&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg`;
+
+    return this.http.get<DataResponse>(url).map(
+      data => {
+        // console.log(data.hdurl);
+        // console.log(data);
+        return data;
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          console.log("Client-side error occured.");
+        } else {
+          console.log("Server-side error occured.");
+        }
+      }
+    );
+  }
 }

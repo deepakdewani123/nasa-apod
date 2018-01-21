@@ -5,7 +5,8 @@ import {
   ModalController,
   Platform,
   ToastController,
-  normalizeURL
+  normalizeURL,
+  PopoverController
 } from "ionic-angular";
 
 import { Component } from "@angular/core";
@@ -29,6 +30,7 @@ import {
   animate,
   transition
 } from "@angular/animations";
+import { PopoverPage } from "../popover/popover";
 
 declare var cordova: any;
 
@@ -61,7 +63,7 @@ export class TodayPage {
   visibility: string;
 
   constructor(
-    public navCtrl: NavController,
+    private navCtrl: NavController,
     public navParams: NavParams,
     private dataService: DataService,
     private modalCtrl: ModalController,
@@ -69,23 +71,24 @@ export class TodayPage {
     private platform: Platform,
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
-    public toastCtrl: ToastController,
+    private toastCtrl: ToastController,
     private file: File,
     private filePath: FilePath,
     private transfer: FileTransfer,
-    private storage: Storage
+    private storage: Storage,
+    private popoverCtrl: PopoverController
   ) {
     this.nasaData = new NasaData();
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
-    this.visibility = "hidden";
+    this.visibility = "shown";
   }
 
   ionViewDidLoad() {
     this.storage.set("dataArray", []);
     // console.log("ionViewDidLoad TodayPage");
     this.statusBar.hide();
-    this.dataService.getTodayData(false).subscribe(
+    this.dataService.getTodayData().subscribe(
       result => {
         this.nasaData = new NasaData({
           title: result.title,
@@ -190,7 +193,12 @@ export class TodayPage {
     }
   }
 
-  search(date: string) {}
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: myEvent
+    });
+  }
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
