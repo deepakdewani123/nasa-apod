@@ -3,9 +3,12 @@ import {
   IonicPage,
   NavController,
   NavParams,
-  ViewController
+  ViewController,
+  ModalController
 } from "ionic-angular";
+
 import { DataService } from "../../app/services/data.service";
+import { ImageViewPage } from "./../image-view/image-view";
 
 /**
  * Generated class for the PopoverPage page.
@@ -35,7 +38,8 @@ export class PopoverPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    private dataService: DataService
+    private dataService: DataService,
+    private modalCtrl: ModalController
   ) {}
 
   ionViewDidLoad() {
@@ -44,6 +48,10 @@ export class PopoverPage {
     //   this.dateSecond.setFocus();
     // }, 500);
   }
+
+  // ionViewWillEnter() {
+  //   this.viewCtrl.dismiss();
+  // }
 
   close() {
     this.viewCtrl.dismiss();
@@ -84,9 +92,23 @@ export class PopoverPage {
     }-${this.dateFirst.value}${this.dateSecond.value}`;
 
     console.log(date);
+
     this.dataService.getDataForDate(date).subscribe(
       result => {
         console.log(result);
+        let modal = this.modalCtrl.create(
+          ImageViewPage,
+          {
+            imageUrl: result.hdurl,
+            date: result.date,
+            title: result.title
+          },
+          {
+            // enterAnimation: "modal-scale-up-enter",
+            // leaveAnimation: "modal-scale-up-leave"
+          }
+        );
+        modal.present();
       },
       error => {
         console.log(error);
