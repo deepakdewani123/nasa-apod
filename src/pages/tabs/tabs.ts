@@ -1,3 +1,4 @@
+import { RecentsPage } from "./../recents/recents";
 import { Component } from "@angular/core";
 // import { Subject } from "rxjs/Subject";
 
@@ -38,8 +39,9 @@ export class TabsPage {
   // private visibility = new Subject<any>();
 
   tab1Root = TodayPage;
-  tab2Root = FavoritesPage;
-  tab3Root = SettingsPage;
+  tab2Root = RecentsPage;
+  tab3Root = FavoritesPage;
+  tab4Root = SettingsPage;
 
   constructor() {
     // this.visibility = "hidden";

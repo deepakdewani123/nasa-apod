@@ -1,5 +1,13 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ModalController
+} from "ionic-angular";
+
+import { ImageViewPage } from "./../image-view/image-view";
+
 import { NasaData } from "../../app/model/data.model";
 import { Storage } from "@ionic/storage";
 
@@ -20,7 +28,8 @@ export class FavoritesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private storage: Storage
+    private storage: Storage,
+    private modalCtrl: ModalController
   ) {
     this.data = [];
   }
@@ -37,5 +46,21 @@ export class FavoritesPage {
 
       console.log(this.data);
     });
+  }
+
+  openImageView(item: NasaData) {
+    let modal = this.modalCtrl.create(
+      ImageViewPage,
+      {
+        imageUrl: item.hdurl,
+        date: item.date,
+        title: item.title
+      },
+      {
+        // enterAnimation: "modal-scale-up-enter",
+        // leaveAnimation: "modal-scale-up-leave"
+      }
+    );
+    modal.present();
   }
 }

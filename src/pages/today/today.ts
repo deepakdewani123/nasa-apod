@@ -119,7 +119,7 @@ export class TodayPage {
     });
   }
 
-  private openImageView() {
+  openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {

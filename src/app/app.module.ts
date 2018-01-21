@@ -1,3 +1,4 @@
+import { RecentsPage } from "./../pages/recents/recents";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ErrorHandler, NgModule } from "@angular/core";
@@ -23,7 +24,14 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 
 @NgModule({
-  declarations: [MyApp, TabsPage, TodayPage, FavoritesPage, SettingsPage],
+  declarations: [
+    MyApp,
+    TabsPage,
+    TodayPage,
+    RecentsPage,
+    FavoritesPage,
+    SettingsPage
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -37,6 +45,7 @@ import { StatusBar } from "@ionic-native/status-bar";
     MyApp,
     TabsPage,
     TodayPage,
+    RecentsPage,
     FavoritesPage,
     SettingsPage,
     ImageViewPage
