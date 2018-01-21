@@ -1,10 +1,12 @@
+import { NasaData } from "./../../app/model/data.model";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import {
   IonicPage,
   NavController,
   NavParams,
   ViewController,
-  ModalController
+  ModalController,
+  normalizeURL
 } from "ionic-angular";
 
 import { DataService } from "../../app/services/data.service";
@@ -98,6 +100,7 @@ export class PopoverPage {
     this.dataService.getDataForDate(date).subscribe(
       result => {
         console.log(result);
+        this.saveData(result);
         let modal = this.modalCtrl.create(
           ImageViewPage,
           {
@@ -116,6 +119,24 @@ export class PopoverPage {
         console.log(error);
       }
     );
+  }
+
+  saveData(data: NasaData) {
+    // if (!data.isSaved) {
+    //   this.storage.get("recentsArray").then((array: NasaData[]) => {
+    //     if (array) {
+    //       data.isSaved = true;
+    //       data.localUrl = normalizeURL(this.savedImageUrl);
+    //       array.push(data);
+    //       this.storage.set("recentsArray", array);
+    //     } else {
+    //       data.isSaved = true;
+    //       data.localUrl = normalizeURL(this.savedImageUrl);
+    //       array.push(data);
+    //       this.storage.set("recentsArray", array);
+    //     }
+    //   });
+    // }
   }
 
   deleteInput() {}

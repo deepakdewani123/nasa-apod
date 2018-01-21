@@ -18,7 +18,7 @@
   </div> -->
   <div class="view_image">
     <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="loaded">
-    <img [src]="hdurl" [ngClass]="{'landscape': isLandscape, 'portrait': !isLandscape}" (load)="loaded = true" [hidden]="!loaded"
+    <img [src]="imgUrl" [ngClass]="{'landscape': isLandscape, 'portrait': !isLandscape}" (load)="loaded = true" [hidden]="!loaded"
     />
   </div>
 

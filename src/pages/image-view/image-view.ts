@@ -1,3 +1,4 @@
+import { NasaData } from "./../../app/model/data.model";
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -34,7 +35,10 @@ import {
   ]
 })
 export class ImageViewPage {
+  data: NasaData;
+  imgUrl: string;
   hdurl: string;
+  localUrl: string;
   loaded: boolean;
   isLandscape: boolean;
   type: string;
@@ -48,16 +52,32 @@ export class ImageViewPage {
     private screenOrientation: ScreenOrientation,
     private platform: Platform
   ) {
-    this.hdurl =
-      this.navParams.get("imageUrl") == null
-        ? ""
-        : this.navParams.get("imageUrl");
+    this.data = this.navParams.get("data");
 
-    this.todayDate =
-      this.navParams.get("date") == null ? "" : this.navParams.get("date");
+    if (this.data) {
+      this.hdurl = this.data.hdurl;
+      this.localUrl = this.data.localUrl;
+      this.todayDate = this.data.date;
+      this.title = this.data.title;
+      this.imgUrl = this.data.localUrl === "" ? this.hdurl : this.localUrl;
+    }
+    // this.hdurl =
+    //   this.navParams.get("imageUrl") == null
+    //     ? ""
+    //     : this.navParams.get("imageUrl");
 
-    this.title =
-      this.navParams.get("title") == null ? "" : this.navParams.get("title");
+    // this.localUrl =
+    //   this.navParams.get("localUrl") == null
+    //     ? ""
+    //     : this.navParams.get("localUrl");
+
+    // this.todayDate =
+    //   this.navParams.get("date") == null ? "" : this.navParams.get("date");
+
+    // this.title =
+    //   this.navParams.get("title") == null ? "" : this.navParams.get("title");
+
+    // this.imgUrl = this.localUrl === "" ? this.hdurl : this.localUrl;
 
     this.loaded = false;
     this.isLandscape = false;

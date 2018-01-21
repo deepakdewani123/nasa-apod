@@ -127,9 +127,11 @@ export class TodayPage {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
+        data: this.nasaData
         imageUrl: this.nasaData.hdurl,
         date: this.nasaData.date,
-        title: this.nasaData.title
+        title: this.nasaData.title,
+        localUrl: this.nasaData.localUrl;
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -237,7 +239,6 @@ export class TodayPage {
       .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
       .then(
         entry => {
-          // console.log("download complete: " + entry.toURL());
           this.savedImageUrl = entry.toURL();
           // this.presentToast(this.savedImageUrl);
         },
