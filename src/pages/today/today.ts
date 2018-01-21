@@ -98,6 +98,7 @@ export class TodayPage {
           url: result.url,
           hdurl: result.hdurl,
           imageLoaded: false,
+          isFav: false,
           isSaved: false,
           localUrl: ""
         });
@@ -150,9 +151,9 @@ export class TodayPage {
   }
 
   favoriteData(data: NasaData) {
-    if (data.isSaved) {
+    if (data.isFav) {
       // this.presentToast("Already saved!");
-      data.isSaved = false;
+      data.isFav = false;
       this.storage.get("dataArray").then((array: NasaData[]) => {
         if (array) {
           var index = array.findIndex(function(object) {
@@ -176,14 +177,14 @@ export class TodayPage {
     } else {
       this.storage.get("dataArray").then((array: NasaData[]) => {
         if (array) {
-          data.isSaved = true;
+          data.isFav = true;
           data.localUrl = normalizeURL(this.savedImageUrl);
           console.log(data.localUrl);
           array.push(data);
           this.storage.set("dataArray", array);
         } else {
           // array: NasaData[] = [];
-          data.isSaved = true;
+          data.isFav = true;
           data.localUrl = normalizeURL(this.savedImageUrl);
           array.push(data);
           this.storage.set("dataArray", array);

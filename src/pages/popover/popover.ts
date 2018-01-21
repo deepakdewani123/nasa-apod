@@ -9,6 +9,7 @@ import {
 
 import { DataService } from "../../app/services/data.service";
 import { ImageViewPage } from "./../image-view/image-view";
+import { Storage } from "@ionic/storage";
 
 /**
  * Generated class for the PopoverPage page.
@@ -39,7 +40,8 @@ export class PopoverPage {
     public navParams: NavParams,
     public viewCtrl: ViewController,
     private dataService: DataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private storage: Storage
   ) {}
 
   ionViewDidLoad() {
