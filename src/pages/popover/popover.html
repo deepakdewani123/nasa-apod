@@ -10,17 +10,20 @@
 <div class="date_div">
 
   <div class="year_input">
-    <ion-input #yearFirst (keyup)="yearFocusNext()" class="base" maxlength="1" value="2" placeholder="0"></ion-input>
-    <ion-input #yearSecond (keyup)="yearFocusNext()" class="base" maxlength="1" value="0" placeholder="0"></ion-input>
-    <ion-input #yearThird (keyup)="yearFocusNext()" class="base" maxlength="1" value="1" placeholder="0"></ion-input>
-    <ion-input #yearFourth (keyup)="yearFocusNext()" class="base" maxlength="1" value="8" placeholder="0"></ion-input>
+    <ion-input #yearFirst type="number" pattern="[0-9]*" (keyup)="yearFocusNext()" class="base" maxlength="1" value="2" placeholder="0"></ion-input>
+    <ion-input #yearSecond type="number" pattern="[0-9]*" (keyup)="yearFocusNext()" class="base" maxlength="1" value="0" placeholder="0"></ion-input>
+    <ion-input #yearThird type="number" pattern="[0-9]*" (keyup)="yearFocusNext()" class="base" maxlength="1" value="1" placeholder="0"></ion-input>
+    <ion-input #yearFourth type="number" pattern="[0-9]*" (keyup)="yearFocusNext()" class="base" maxlength="1" value="8" placeholder="0"></ion-input>
   </div>
   <div class="date_month_input">
-    <ion-input #monthFirst (keyup)="monthFocusNext()" class="base" maxlength="1" placeholder="0" value=""></ion-input>
-    <ion-input #monthSecond (keyup)="monthFocusNext()" class="base" maxlength="1" placeholder="0" value=""></ion-input>
+    <ion-input #monthFirst type="number" pattern="[0-9]*" (keyup)="monthFocusNext()" class="base" maxlength="1" placeholder="0"
+      value=""></ion-input>
+    <ion-input #monthSecond type="number" pattern="[0-9]*" (keyup)="monthFocusNext()" class="base" maxlength="1" placeholder="0"
+      value=""></ion-input>
     <div class="slash">/</div>
-    <ion-input #dateFirst (keyup)="dateFocusNext()" class="base" maxlength="1" placeholder="0" value=""></ion-input>
-    <ion-input #dateSecond class="base" maxlength="1" placeholder="0" value=""></ion-input>
+    <ion-input #dateFirst type="number" pattern="[0-9]*" (keyup)="dateFocusNext()" class="base" maxlength="1" placeholder="0"
+      value=""></ion-input>
+    <ion-input #dateSecond type="number" pattern="[0-9]*" class="base" maxlength="1" placeholder="0" value=""></ion-input>
   </div>
   <button class="search_button" ion-button icon-only clear (click)="search()">
     GO

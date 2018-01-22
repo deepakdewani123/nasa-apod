@@ -67,27 +67,30 @@ export class PopoverPage {
   yearFocusNext() {
     if (this.yearFirst.value !== "") {
       this.yearSecond.setFocus();
-    } else if (this.yearSecond.value !== "") {
-      this.yearThird.setFocus();
-    } else if (this.yearThird.value !== "") {
-      this.yearFourth.setFocus();
-    } else if (this.yearFourth.value !== "") {
-      this.dateFirst.setFocus();
-    }
-  }
-
-  dateFocusNext() {
-    if (this.dateFirst.value !== "") {
-      this.dateSecond.setFocus();
+      if (this.yearSecond.value !== "") {
+        this.yearThird.setFocus();
+        if (this.yearThird.value !== "") {
+          this.yearFourth.setFocus();
+          if (this.yearFourth.value !== "") {
+            this.monthFirst.setFocus();
+          }
+        }
+      }
     }
   }
 
   monthFocusNext() {
     if (this.monthFirst.value !== "") {
       this.monthSecond.setFocus();
+      if (this.monthSecond.value !== "") {
+        this.dateFirst.setFocus();
+      }
     }
-    if (this.monthSecond.value !== "") {
-      this.dateFirst.setFocus();
+  }
+
+  dateFocusNext() {
+    if (this.dateFirst.value !== "") {
+      this.dateSecond.setFocus();
     }
   }
 
