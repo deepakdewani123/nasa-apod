@@ -10,13 +10,7 @@ import { ImageViewPage } from "./../image-view/image-view";
 
 import { NasaData } from "../../app/model/data.model";
 import { Storage } from "@ionic/storage";
-
-/**
- * Generated class for the FavoritesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { FavDetailPage } from "./fav-detail/fav-detail";
 
 @IonicPage()
 @Component({
@@ -38,29 +32,29 @@ export class FavoritesPage {
     console.log("ionViewDidLoad FavoritesPage");
   }
   ionViewWillEnter() {
-    this.storage.get("dataArray").then((dataArray: NasaData[]) => {
+    this.storage.get("favArray").then((dataArray: NasaData[]) => {
       if (dataArray) {
         this.data = dataArray;
-      } else {
       }
-
-      console.log(this.data);
     });
   }
 
-  openImageView(item: NasaData) {
-    let modal = this.modalCtrl.create(
-      ImageViewPage,
-      {
-        imageUrl: item.hdurl,
-        date: item.date,
-        title: item.title
-      },
-      {
-        // enterAnimation: "modal-scale-up-enter",
-        // leaveAnimation: "modal-scale-up-leave"
-      }
-    );
-    modal.present();
+  openFavDetail(item: NasaData) {
+    this.navCtrl.push(FavDetailPage, {
+      data: item
+    });
+    // let modal = this.modalCtrl.create(
+    //   SearchResultPage,
+    //   {
+    //     imageUrl: item.hdurl,
+    //     date: item.date,
+    //     title: item.title
+    //   },
+    //   {
+    //     // enterAnimation: "modal-scale-up-enter",
+    //     // leaveAnimation: "modal-scale-up-leave"
+    //   }
+    // );
+    // modal.present();
   }
 }

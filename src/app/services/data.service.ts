@@ -23,7 +23,9 @@ export class DataService {
 
   getTodayData() {
     let url: string;
-    url = this.baseURL + "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
+    url =
+      this.baseURL +
+      "date=2017-01-12&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
 
     return this.http.get<DataResponse>(url).map(
       data => {

@@ -1,3 +1,4 @@
+import { Component } from "@angular/core";
 import {
   IonicPage,
   NavController,
@@ -9,11 +10,9 @@ import {
   PopoverController
 } from "ionic-angular";
 
-import { Component } from "@angular/core";
-
-import { ImageViewPage } from "./../image-view/image-view";
-import { DataService } from "../../app/services/data.service";
-import { NasaData } from "../../app/model/data.model";
+import { ImageViewPage } from "./../../image-view/image-view";
+import { DataService } from "../../../app/services/data.service";
+import { NasaData } from "../../../app/model/data.model";
 
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -22,7 +21,7 @@ import { SocialSharing } from "@ionic-native/social-sharing";
 import { File } from "@ionic-native/file";
 import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
-import { PopoverPage } from "../popover/popover";
+import { PopoverPage } from "../../popover/popover";
 
 import {
   trigger,
@@ -36,8 +35,8 @@ declare var cordova: any;
 
 @IonicPage()
 @Component({
-  selector: "page-today",
-  templateUrl: "today.html",
+  selector: "page-fav-detail",
+  templateUrl: "fav-detail.html",
   animations: [
     trigger("visibility", [
       state(
@@ -56,7 +55,7 @@ declare var cordova: any;
     ])
   ]
 })
-export class TodayPage {
+export class FavDetailPage {
   nasaData: NasaData;
   platformName: string;
   savedImageUrl: string;
@@ -78,60 +77,21 @@ export class TodayPage {
     private storage: Storage,
     private popoverCtrl: PopoverController
   ) {
-    this.nasaData = new NasaData();
+    this.nasaData = this.navParams.get("data");
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
     this.visibility = "shown";
   }
 
   ionViewDidLoad() {
-    this.storage.set("favArray", []);
-    // console.log("ionViewDidLoad TodayPage");
-    this.statusBar.hide();
-    this.dataService.getTodayData().subscribe(
-      result => {
-        this.nasaData = new NasaData({
-          title: result.title,
-          explanation: result.explanation,
-          date: result.date,
-          copyright: result.copyright,
-          url: result.url,
-          hdurl: result.hdurl,
-          imageLoaded: false,
-          isFav: false,
-          isSaved: false,
-          localUrl: ""
-        });
-        // this.download(result.url);
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
-  ionViewWillEnter() {
-    // console.log("ionViewWillEnter TodayPage");
-    this.platform.ready().then(() => {
-      // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-      // this.screenOrientation.lock(
-      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY
-      // );
-      // this.screenOrientation.lock(
-      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_SECONDARY
-      // );
-    });
+    console.log("ionViewDidLoad FavDetailPage");
   }
 
   openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        data: this.nasaData,
-        imageUrl: this.nasaData.hdurl,
-        date: this.nasaData.date,
-        title: this.nasaData.title,
-        localUrl: this.nasaData.localUrl
+        data: this.nasaData
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -185,7 +145,7 @@ export class TodayPage {
           array.push(data);
           this.storage.set("favArray", array);
         } else {
-          array = [];
+          // array: NasaData[] = [];
           data.isFav = true;
           data.localUrl = normalizeURL(this.savedImageUrl);
           array.push(data);
@@ -205,29 +165,5 @@ export class TodayPage {
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
-  }
-
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
-  }
-
-  private download(url: string) {
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer
-      .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
-      .then(
-        entry => {
-          this.savedImageUrl = entry.toURL();
-          // this.presentToast(this.savedImageUrl);
-        },
-        error => {
-          // handle error
-        }
-      );
   }
 }

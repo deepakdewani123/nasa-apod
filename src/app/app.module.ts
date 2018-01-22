@@ -1,3 +1,4 @@
+import { SearchResultPage } from "./../pages/search-result/search-result";
 import { RecentsPage } from "./../pages/recents/recents";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -23,6 +24,7 @@ import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 import { PopoverPage } from "../pages/popover/popover";
+import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
 
 @NgModule({
   declarations: [
@@ -32,13 +34,17 @@ import { PopoverPage } from "../pages/popover/popover";
     RecentsPage,
     FavoritesPage,
     SettingsPage,
-    PopoverPage
+    PopoverPage,
+    SearchResultPage,
+    FavDetailPage
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonText: ""
+    }),
     IonicStorageModule.forRoot(),
     ImageViewPageModule
   ],
@@ -51,7 +57,9 @@ import { PopoverPage } from "../pages/popover/popover";
     FavoritesPage,
     SettingsPage,
     ImageViewPage,
-    PopoverPage
+    PopoverPage,
+    SearchResultPage,
+    FavDetailPage
   ],
   providers: [
     StatusBar,

@@ -2,16 +2,16 @@
   <ion-navbar color="dark">
     <!-- <ion-title>{{ nasaData.date | date: 'mediumDate' }}</ion-title> -->
     <!-- <ion-buttons>
-      <button ion-button icon-only start>
-        <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
-        <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
-      </button>
-    </ion-buttons> -->
+        <button ion-button icon-only start>
+          <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
+          <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
+        </button>
+      </ion-buttons> -->
 
     <ion-buttons start>
-      <button ion-button icon-only (click)="dismiss()">
-        <ion-icon class="icon_size" icon-only color="light" name="close"></ion-icon>
-      </button>
+      <!-- <button ion-button icon-only (click)="dismiss()">
+          <ion-icon class="icon_size" icon-only color="light" name="close"></ion-icon>
+        </button> -->
       <button ion-button icon-only (click)="favoriteData(nasaData)">
         <ion-icon class="icon_size" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
       </button>
@@ -34,8 +34,8 @@
     <img [src]="nasaData.url" (load)="nasaData.imageLoaded = true" [hidden]="!nasaData.imageLoaded" />
     <!-- <p class="date_placeholder animated-background"></p> -->
     <!-- <p class="copyright_placeholder animated-background"></p>
-    <h1 class="title_placeholder animated-background"></h1>
-    <p class="explanation_placeholder animated-background"></p> -->
+      <h1 class="title_placeholder animated-background"></h1>
+      <p class="explanation_placeholder animated-background"></p> -->
   </div>
 
   <div *ngIf="nasaData.imageLoaded">

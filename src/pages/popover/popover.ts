@@ -1,3 +1,4 @@
+import { SearchResultPage } from "./../search-result/search-result";
 import { NasaData } from "./../../app/model/data.model";
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import {
@@ -36,6 +37,8 @@ export class PopoverPage {
 
   @ViewChild("dateFirst") dateFirst;
   @ViewChild("dateSecond") dateSecond;
+
+  nasaData: NasaData;
 
   constructor(
     public navCtrl: NavController,
@@ -99,14 +102,29 @@ export class PopoverPage {
 
     this.dataService.getDataForDate(date).subscribe(
       result => {
-        console.log(result);
-        this.saveData(result);
+        this.nasaData = new NasaData({
+          title: result.title,
+          explanation: result.explanation,
+          date: result.date,
+          copyright: result.copyright,
+          url: result.url,
+          hdurl: result.hdurl,
+          imageLoaded: false,
+          isFav: false,
+          isSaved: false,
+          localUrl: ""
+        });
+        // console.log(result);
+        // this.saveData(result);
+
+        // this.navCtrl.push(SearchResultPage, {
+        //   data: this.nasaData
+        // });
+
         let modal = this.modalCtrl.create(
-          ImageViewPage,
+          SearchResultPage,
           {
-            imageUrl: result.hdurl,
-            date: result.date,
-            title: result.title
+            data: this.nasaData
           },
           {
             // enterAnimation: "modal-scale-up-enter",
