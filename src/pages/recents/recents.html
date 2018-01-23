@@ -1,18 +1,31 @@
-<!--
-  Generated template for the RecentsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>recents</ion-title>
+  <ion-navbar color="dark">
+    <ion-title>Recents</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+  <div class="no_fav" *ngIf="data.length === 0">
+    <h1 style="color: white">Oops! You haven't explored anything yet.</h1>
+  </div>
+  <ion-card *ngFor="let item of data">
+    <div class="parent_div">
+      <div class="image_div">
+        <img class="image" [src]="item.url" alt="no image here">
+      </div>
+      <!-- <div class="date_title_div"> -->
+      <div class="date_div">
+        <p class="date">{{item.date | date: 'dd MMM'}}</p>
+      </div>
+      <div class="title_div">
+        <p class="title">{{item.title}}</p>
+      </div>
+      <!-- </div> -->
+
+    </div>
+
+  </ion-card>
 
 </ion-content>

@@ -1,3 +1,86 @@
 page-recents {
+  .item-inner {
+    padding-right: 0px !important;
+  }
+  .label {
+    margin: 0;
+  }
+  .list-ios,
+  .list-md {
+    margin: 0px;
+  }
+  .card-ios,
+  .card-md {
+    margin: 12px 5px;
+    border-radius: 2px;
+    width: calc(100% - 10px);
+    font-size: 1.4rem;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
 
+  .scroll-content {
+    background: #181818;
+  }
+  ion-content {
+    p,
+    h1 {
+      margin: 0px;
+    }
+
+    .no_fav {
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .parent_div {
+      width: 100%;
+      height: 160px;
+      position: relative;
+      .image_div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-height: 160px;
+        background: #000;
+
+        .image {
+          max-height: 160px;
+          width: 100%;
+          opacity: 0.6;
+        }
+      }
+      .date_div {
+        position: absolute;
+        z-index: 10;
+        bottom: 8px;
+        left: 7px;
+        width: 40px;
+        text-align: center;
+        .date {
+          font-size: 15px;
+          font-weight: bold;
+          color: white;
+        }
+      }
+
+      .title_div {
+        position: absolute;
+        z-index: 10;
+        bottom: 8px;
+        left: 54px;
+        .title {
+          font-size: 15px;
+          font-weight: bold;
+          color: white;
+        }
+      }
+    }
+  }
 }

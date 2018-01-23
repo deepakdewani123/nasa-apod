@@ -14,13 +14,6 @@ import { DataService } from "../../app/services/data.service";
 import { ImageViewPage } from "./../image-view/image-view";
 import { Storage } from "@ionic/storage";
 
-/**
- * Generated class for the PopoverPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: "page-popover",
@@ -39,6 +32,7 @@ export class PopoverPage {
   @ViewChild("dateSecond") dateSecond;
 
   nasaData: NasaData;
+  data: NasaData;
 
   constructor(
     public navCtrl: NavController,
@@ -101,8 +95,68 @@ export class PopoverPage {
       this.monthSecond.value
     }-${this.dateFirst.value}${this.dateSecond.value}`;
 
-    console.log(date);
+    this.storage.get("favArray").then((favArray: NasaData[]) => {
+      let index = favArray.findIndex(function(object) {
+        return object.date === date;
+      });
 
+      if (index === -1) {
+        this.storage.get("recentsArray").then((recArray: NasaData[]) => {
+          index = recArray.findIndex(function(object) {
+            return object.date === date;
+          });
+          if (index === -1) {
+            this.getDataFromServer(date);
+          } else {
+            this.navigateToSearchPage(recArray[index]);
+          }
+        });
+      } else {
+        this.navigateToSearchPage(favArray[index]);
+      }
+    });
+  }
+
+  checkIfAlreadyExists(date: string): boolean {
+    if (this.checkForFavArray(date) !== -1) {
+      return true;
+    }
+    if (this.checkForRecentsArray(date) !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkForFavArray(date: string): number {
+    let index = 0;
+    this.storage.get("favArray").then((array: NasaData[]) => {
+      index = array.findIndex(function(object) {
+        return object.date === date;
+      });
+      if (index !== -1) {
+        this.data = array[index];
+      }
+    });
+
+    return index;
+  }
+
+  checkForRecentsArray(date: string): number {
+    let index = 0;
+    this.storage.get("recentsArray").then((array: NasaData[]) => {
+      index = array.findIndex(function(object) {
+        return object.date === date;
+      });
+      if (index !== -1) {
+        this.data = array[index];
+        console.log(array[index]);
+      }
+    });
+    return index;
+  }
+
+  getDataFromServer(date: string) {
     this.dataService.getDataForDate(date).subscribe(
       result => {
         this.nasaData = new NasaData({
@@ -117,24 +171,7 @@ export class PopoverPage {
           isSaved: false,
           localUrl: ""
         });
-        // console.log(result);
-        // this.saveData(result);
-
-        // this.navCtrl.push(SearchResultPage, {
-        //   data: this.nasaData
-        // });
-
-        let modal = this.modalCtrl.create(
-          SearchResultPage,
-          {
-            data: this.nasaData
-          },
-          {
-            // enterAnimation: "modal-scale-up-enter",
-            // leaveAnimation: "modal-scale-up-leave"
-          }
-        );
-        modal.present();
+        this.navigateToSearchPage(this.nasaData);
       },
       error => {
         console.log(error);
@@ -142,22 +179,18 @@ export class PopoverPage {
     );
   }
 
-  saveData(data: NasaData) {
-    // if (!data.isSaved) {
-    //   this.storage.get("recentsArray").then((array: NasaData[]) => {
-    //     if (array) {
-    //       data.isSaved = true;
-    //       data.localUrl = normalizeURL(this.savedImageUrl);
-    //       array.push(data);
-    //       this.storage.set("recentsArray", array);
-    //     } else {
-    //       data.isSaved = true;
-    //       data.localUrl = normalizeURL(this.savedImageUrl);
-    //       array.push(data);
-    //       this.storage.set("recentsArray", array);
-    //     }
-    //   });
-    // }
+  navigateToSearchPage(data: NasaData) {
+    let modal = this.modalCtrl.create(
+      SearchResultPage,
+      {
+        data: data
+      },
+      {
+        // enterAnimation: "modal-scale-up-enter",
+        // leaveAnimation: "modal-scale-up-leave"
+      }
+    );
+    modal.present();
   }
 
   deleteInput() {}

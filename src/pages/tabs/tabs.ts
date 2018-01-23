@@ -1,7 +1,7 @@
-import { RecentsPage } from "./../recents/recents";
 import { Component } from "@angular/core";
 // import { Subject } from "rxjs/Subject";
 
+import { RecentsPage } from "./../recents/recents";
 import { SettingsPage } from "./../settings/settings";
 import { TodayPage } from "./../today/today";
 import { FavoritesPage } from "../favorites/favorites";

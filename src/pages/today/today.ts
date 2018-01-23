@@ -87,7 +87,7 @@ export class TodayPage {
   ionViewDidLoad() {
     this.storage.set("favArray", []);
     // console.log("ionViewDidLoad TodayPage");
-    this.statusBar.hide();
+    // this.statusBar.hide();
     this.dataService.getTodayData().subscribe(
       result => {
         this.nasaData = new NasaData({
@@ -206,6 +206,10 @@ export class TodayPage {
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
   }
+
+  // private saveTodayData() {
+
+  // }
 
   private presentToast(text) {
     let toast = this.toastCtrl.create({

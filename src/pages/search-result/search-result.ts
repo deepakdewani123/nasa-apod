@@ -85,8 +85,27 @@ export class SearchResultPage {
 
   ionViewDidLoad() {
     // this.storage.set("favArray", []);
-    // console.log("ionViewDidLoad TodayPage");
     this.statusBar.hide();
+    this.saveData(this.nasaData);
+  }
+
+  private saveData(data: NasaData) {
+    if (!data.isSaved) {
+      this.storage.get("recentsArray").then((array: NasaData[]) => {
+        if (array) {
+          data.isSaved = true;
+          data.localUrl = normalizeURL(this.savedImageUrl);
+          array.push(data);
+          this.storage.set("recentsArray", array);
+        } else {
+          array = [];
+          data.isSaved = true;
+          data.localUrl = normalizeURL(this.savedImageUrl);
+          array.push(data);
+          this.storage.set("recentsArray", array);
+        }
+      });
+    }
   }
 
   openImageView() {
