@@ -1,26 +1,19 @@
-page-today {
-  // .toolbar-background-ios,
-  // .toolbar-background-md {
-  //   background: #1a1a1a;
-  // }
-
+page-recent-details {
   .scroll-content {
     background: #181818;
     padding: 0px;
     margin-top: 0px !important;
     padding-top: 0px !important;
   }
-  .datetime-ios,
-  .datetime-md {
-    padding: 0px;
-    width: 0;
-    height: 0;
-  }
 
   ion-content {
     p,
     h1 {
       margin: 0px;
+    }
+
+    .icon_size {
+      font-size: 30px;
     }
 
     @keyframes placeHolderShimmer {
@@ -33,7 +26,7 @@ page-today {
     }
 
     .animated-background {
-      animation-duration: 4s;
+      animation-duration: 8s;
       animation-fill-mode: forwards;
       animation-iteration-count: infinite;
       animation-name: placeHolderShimmer;
@@ -45,7 +38,7 @@ page-today {
         #dddddd 18%,
         #eeeeee 33%
       );
-      background-size: 300px 100px;
+      background-size: 100px 100px;
       height: 96px;
       position: relative;
     }

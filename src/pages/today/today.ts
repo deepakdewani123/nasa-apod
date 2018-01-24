@@ -15,6 +15,7 @@ import { ImageViewPage } from "./../image-view/image-view";
 import { DataService } from "../../app/services/data.service";
 import { NasaData } from "../../app/model/data.model";
 
+import { DatePicker } from "@ionic-native/date-picker";
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -61,6 +62,7 @@ export class TodayPage {
   platformName: string;
   savedImageUrl: string;
   visibility: string;
+  date: string;
 
   constructor(
     private navCtrl: NavController,
@@ -70,6 +72,7 @@ export class TodayPage {
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
     private statusBar: StatusBar,
+    private datePicker: DatePicker,
     private socialSharing: SocialSharing,
     private toastCtrl: ToastController,
     private file: File,
@@ -82,10 +85,11 @@ export class TodayPage {
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
     this.visibility = "shown";
+    this.date = "";
   }
 
   ionViewDidLoad() {
-    this.storage.set("favArray", []);
+    // this.storage.set("favArray", []);
     // console.log("ionViewDidLoad TodayPage");
     // this.statusBar.hide();
     this.dataService.getTodayData().subscribe(
@@ -123,6 +127,10 @@ export class TodayPage {
     });
   }
 
+  search() {
+    console.log(this.date);
+  }
+
   openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
@@ -157,41 +165,20 @@ export class TodayPage {
       // this.presentToast("Already saved!");
       data.isFav = false;
       this.storage.get("favArray").then((array: NasaData[]) => {
-        if (array) {
-          var index = array.findIndex(function(object) {
-            return object.title === data.title;
-          });
-          if (index !== -1) {
-            array.splice(index, 1);
-          }
-          this.storage.set("favArray", array);
-        } else {
-          // var index = array.findIndex(function(object) {
-          //   return object.title === data.title;
-          // });
-          if (index !== -1) {
-            array.splice(index, 1);
-          }
-          this.storage.set("favArray", array);
+        var index = array.findIndex(function(object) {
+          return object.title === data.title;
+        });
+        if (index !== -1) {
+          array.splice(index, 1);
         }
-        // console.log(array);
+        this.storage.set("favArray", array);
       });
     } else {
       this.storage.get("favArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          console.log(data.localUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        } else {
-          array = [];
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        }
-        // console.log(array);
+        data.isFav = true;
+        data.localUrl = normalizeURL(this.savedImageUrl);
+        array.push(data);
+        this.storage.set("favArray", array);
       });
     }
   }

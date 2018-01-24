@@ -12,12 +12,13 @@
       <button ion-button icon-only (click)="dismiss()">
         <ion-icon class="icon_size" icon-only color="light" name="close"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="favoriteData(nasaData)">
-        <ion-icon class="icon_size" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
-      </button>
+
 
     </ion-buttons>
     <ion-buttons end>
+      <button ion-button icon-only (click)="favoriteData(nasaData)">
+        <ion-icon class="icon_size" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
+      </button>
       <button ion-button icon-only (click)="shareImage()">
         <ion-icon *ngIf="platformName === 'ios'" class="icon_size" icon-only color="light" name="share-outline"></ion-icon>
         <ion-icon *ngIf="platformName === 'android'" class="icon_size" icon-only color="light" name="share"></ion-icon>

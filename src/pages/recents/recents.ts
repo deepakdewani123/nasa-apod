@@ -1,3 +1,4 @@
+import { RecentDetailsPage } from "./recent-details/recent-details";
 import { Component } from "@angular/core";
 import {
   IonicPage,
@@ -8,12 +9,6 @@ import {
 
 import { NasaData } from "../../app/model/data.model";
 import { Storage } from "@ionic/storage";
-/**
- * Generated class for the RecentsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -41,5 +36,24 @@ export class RecentsPage {
         this.data = dataArray.sort().reverse();
       }
     });
+  }
+
+  openRecentsDetail(item: NasaData) {
+    this.navCtrl.push(RecentDetailsPage, {
+      data: item
+    });
+    // let modal = this.modalCtrl.create(
+    //   SearchResultPage,
+    //   {
+    //     imageUrl: item.hdurl,
+    //     date: item.date,
+    //     title: item.title
+    //   },
+    //   {
+    //     // enterAnimation: "modal-scale-up-enter",
+    //     // leaveAnimation: "modal-scale-up-leave"
+    //   }
+    // );
+    // modal.present();
   }
 }

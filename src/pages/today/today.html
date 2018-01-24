@@ -12,9 +12,12 @@
       <button ion-button icon-only (click)="favoriteData(nasaData)">
         <ion-icon class="fav_icon" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="presentPopover($event)">
-        <ion-icon *ngIf="platformName === 'android'" class="fav_icon" icon-only color="light" name="calendar"></ion-icon>
-        <ion-icon *ngIf="platformName === 'ios'" class="fav_icon" icon-only color="light" name="calendar-outline"></ion-icon>
+      <button ion-button icon-only (click)="picker.open()">
+        <ion-datetime #picker displayFormat=" " pickerFormat="YYYY MM DD" (ionChange)="search()" [(ngModel)]="date"></ion-datetime>
+        <ion-icon *ngIf="platformName === 'android'" class="fav_icon" icon-only color="light" name="calendar">
+        </ion-icon>
+        <ion-icon *ngIf="platformName === 'ios'" class="fav_icon" icon-only color="light" name="calendar-outline">
+        </ion-icon>
       </button>
     </ion-buttons>
     <ion-buttons end>
@@ -43,7 +46,6 @@
     <div class="today_image">
       <img *ngIf="nasaData.imageLoaded" [src]="nasaData.url" (load)="nasaData.imageLoaded = true" (click)="openImageView()" />
     </div>
-
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
     <!-- <div class="animated-background"></div> -->
     <div (tap)="tapEvent($event)">

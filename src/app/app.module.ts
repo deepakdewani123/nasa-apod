@@ -1,11 +1,12 @@
+import { ErrorHandler, NgModule } from "@angular/core";
+import { HttpClientModule } from "@angular/common/http";
+import { IonicStorageModule } from "@ionic/storage";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 import { SearchResultPage } from "./../pages/search-result/search-result";
 import { RecentsPage } from "./../pages/recents/recents";
 import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ErrorHandler, NgModule } from "@angular/core";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
-import { HttpClientModule } from "@angular/common/http";
-
 import { MyApp } from "./app.component";
 import { ImageViewPageModule } from "./../pages/image-view/image-view.module";
 import { ImageViewPage } from "./../pages/image-view/image-view";
@@ -14,8 +15,10 @@ import { SettingsPage } from "../pages/settings/settings";
 import { FavoritesPage } from "./../pages/favorites/favorites";
 import { TodayPage } from "../pages/today/today";
 import { DataService } from "../app/services/data.service";
+import { PopoverPage } from "../pages/popover/popover";
+import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
+import { RecentDetailsPage } from "../pages/recents/recent-details/recent-details";
 
-import { IonicStorageModule } from "@ionic/storage";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { SocialSharing } from "@ionic-native/social-sharing";
 import { File } from "@ionic-native/file";
@@ -23,8 +26,7 @@ import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
-import { PopoverPage } from "../pages/popover/popover";
-import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
+import { DatePicker } from "@ionic-native/date-picker";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
     TabsPage,
     TodayPage,
     RecentsPage,
+    RecentDetailsPage,
     FavoritesPage,
     SettingsPage,
     PopoverPage,
@@ -54,6 +57,7 @@ import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
     TabsPage,
     TodayPage,
     RecentsPage,
+    RecentDetailsPage,
     FavoritesPage,
     SettingsPage,
     ImageViewPage,
@@ -62,6 +66,7 @@ import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
     FavDetailPage
   ],
   providers: [
+    DatePicker,
     StatusBar,
     SplashScreen,
     DataService,

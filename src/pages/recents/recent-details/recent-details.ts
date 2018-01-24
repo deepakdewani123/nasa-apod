@@ -10,9 +10,9 @@ import {
   PopoverController
 } from "ionic-angular";
 
-import { ImageViewPage } from "./../image-view/image-view";
-import { DataService } from "../../app/services/data.service";
-import { NasaData } from "../../app/model/data.model";
+import { ImageViewPage } from "./../../image-view/image-view";
+import { DataService } from "../../../app/services/data.service";
+import { NasaData } from "../../../app/model/data.model";
 
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -21,7 +21,7 @@ import { SocialSharing } from "@ionic-native/social-sharing";
 import { File } from "@ionic-native/file";
 import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
-import { PopoverPage } from "../popover/popover";
+import { PopoverPage } from "../../popover/popover";
 
 import {
   trigger,
@@ -35,8 +35,8 @@ declare var cordova: any;
 
 @IonicPage()
 @Component({
-  selector: "page-search-result",
-  templateUrl: "search-result.html",
+  selector: "page-recent-details",
+  templateUrl: "recent-details.html",
   animations: [
     trigger("visibility", [
       state(
@@ -55,7 +55,7 @@ declare var cordova: any;
     ])
   ]
 })
-export class SearchResultPage {
+export class RecentDetailsPage {
   nasaData: NasaData;
   platformName: string;
   savedImageUrl: string;
@@ -84,30 +84,7 @@ export class SearchResultPage {
   }
 
   ionViewDidLoad() {
-    // this.storage.set("favArray", []);
-    this.statusBar.hide();
-    this.saveData(this.nasaData);
-  }
-
-  ionViewWillEnter() {}
-
-  private saveData(data: NasaData) {
-    if (!data.isSaved) {
-      this.storage.get("recentsArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isSaved = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("recentsArray", array);
-        } else {
-          array = [];
-          data.isSaved = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("recentsArray", array);
-        }
-      });
-    }
+    console.log("ionViewDidLoad RecentDetailsPage");
   }
 
   openImageView() {
@@ -188,33 +165,5 @@ export class SearchResultPage {
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
-  }
-
-  dismiss() {
-    this.navCtrl.pop();
-  }
-
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
-  }
-
-  private download(url: string) {
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer
-      .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
-      .then(
-        entry => {
-          this.savedImageUrl = entry.toURL();
-          // this.presentToast(this.savedImageUrl);
-        },
-        error => {
-          // handle error
-        }
-      );
   }
 }
