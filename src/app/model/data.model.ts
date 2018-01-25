@@ -9,6 +9,7 @@ export class NasaData {
   isSaved: boolean;
   isFav: boolean;
   localUrl: string;
+  localHDUrl: string;
 
   constructor(obj?: any) {
     this.title = (obj && obj.title) || "";
@@ -16,6 +17,7 @@ export class NasaData {
     this.date = (obj && obj.date) || "";
     this.copyright = (obj && obj.copyright) || "";
     this.url = (obj && obj.url) || "";
+    this.localHDUrl = (obj && obj.localHDUrl) || "";
     this.hdurl = (obj && obj.hdurl) || "";
     this.imageLoaded = (obj && obj.imageLoaded) || false;
     this.isSaved = (obj && obj.isSaved) || false;

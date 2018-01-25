@@ -42,18 +42,5 @@ export class RecentsPage {
     this.navCtrl.push(RecentDetailsPage, {
       data: item
     });
-    // let modal = this.modalCtrl.create(
-    //   SearchResultPage,
-    //   {
-    //     imageUrl: item.hdurl,
-    //     date: item.date,
-    //     title: item.title
-    //   },
-    //   {
-    //     // enterAnimation: "modal-scale-up-enter",
-    //     // leaveAnimation: "modal-scale-up-leave"
-    //   }
-    // );
-    // modal.present();
   }
 }

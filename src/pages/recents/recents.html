@@ -8,12 +8,12 @@
 <ion-content>
 
   <div class="no_fav" *ngIf="data.length === 0">
-    <h1 style="color: white">Oops! You haven't explored anything yet.</h1>
+    <h1 style="color: white">You haven't explored anything yet.</h1>
   </div>
   <ion-card *ngFor="let item of data" (click)="openRecentsDetail(item)">
     <div class="parent_div">
       <div class="image_div">
-        <img class="image" [src]="item.url" alt="no image here">
+        <img class="image" [src]="item.localUrl" alt="no image here">
       </div>
       <!-- <div class="date_title_div"> -->
       <div class="date_div">

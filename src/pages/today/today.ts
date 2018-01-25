@@ -15,6 +15,7 @@ import { ImageViewPage } from "./../image-view/image-view";
 import { DataService } from "../../app/services/data.service";
 import { NasaData } from "../../app/model/data.model";
 
+import { SearchResultPage } from "./../search-result/search-result";
 import { DatePicker } from "@ionic-native/date-picker";
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -59,10 +60,12 @@ declare var cordova: any;
 })
 export class TodayPage {
   nasaData: NasaData;
+  searchData: NasaData;
   platformName: string;
   savedImageUrl: string;
   visibility: string;
   date: string;
+  imgUrl: string;
 
   constructor(
     private navCtrl: NavController,
@@ -86,6 +89,7 @@ export class TodayPage {
     this.savedImageUrl = "";
     this.visibility = "shown";
     this.date = "";
+    this.imgUrl = "";
   }
 
   ionViewDidLoad() {
@@ -100,13 +104,14 @@ export class TodayPage {
           date: result.date,
           copyright: result.copyright,
           url: result.url,
+          localHDUrl: "",
           hdurl: result.hdurl,
           imageLoaded: false,
           isFav: false,
           isSaved: false,
           localUrl: ""
         });
-        // this.download(result.url);
+        this.download(result.url);
       },
       error => {
         console.log(error);
@@ -128,18 +133,72 @@ export class TodayPage {
   }
 
   search() {
-    console.log(this.date);
+    var self = this;
+    this.storage.get("favArray").then((favArray: NasaData[]) => {
+      let index = favArray.findIndex(function(object) {
+        return object.date === self.date;
+      });
+
+      if (index === -1) {
+        this.storage.get("recentsArray").then((recArray: NasaData[]) => {
+          index = recArray.findIndex(function(object) {
+            return object.date === self.date;
+          });
+          if (index === -1) {
+            this.getDataFromServer(self.date);
+          } else {
+            this.navigateToSearchPage(recArray[index]);
+          }
+        });
+      } else {
+        this.navigateToSearchPage(favArray[index]);
+      }
+    });
+  }
+
+  getDataFromServer(date: string) {
+    this.dataService.getDataForDate(date).subscribe(
+      result => {
+        this.searchData = new NasaData({
+          title: result.title,
+          explanation: result.explanation,
+          date: result.date,
+          copyright: result.copyright,
+          url: result.url,
+          localHDUrl: "",
+          hdurl: result.hdurl,
+          imageLoaded: false,
+          isFav: false,
+          isSaved: false,
+          localUrl: ""
+        });
+        this.navigateToSearchPage(this.searchData);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  navigateToSearchPage(data: NasaData) {
+    let modal = this.modalCtrl.create(
+      SearchResultPage,
+      {
+        data: data
+      },
+      {
+        // enterAnimation: "modal-scale-up-enter",
+        // leaveAnimation: "modal-scale-up-leave"
+      }
+    );
+    modal.present();
   }
 
   openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        data: this.nasaData,
-        imageUrl: this.nasaData.hdurl,
-        date: this.nasaData.date,
-        title: this.nasaData.title,
-        localUrl: this.nasaData.localUrl
+        data: this.nasaData
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -162,7 +221,6 @@ export class TodayPage {
 
   favoriteData(data: NasaData) {
     if (data.isFav) {
-      // this.presentToast("Already saved!");
       data.isFav = false;
       this.storage.get("favArray").then((array: NasaData[]) => {
         var index = array.findIndex(function(object) {
@@ -176,7 +234,7 @@ export class TodayPage {
     } else {
       this.storage.get("favArray").then((array: NasaData[]) => {
         data.isFav = true;
-        data.localUrl = normalizeURL(this.savedImageUrl);
+        // data.localUrl = normalizeURL(this.savedImageUrl);
         array.push(data);
         this.storage.set("favArray", array);
       });
@@ -191,12 +249,10 @@ export class TodayPage {
   }
 
   tapEvent(e) {
+    // this.statusBar.hide();
+    this.visibility === "shown" ? this.statusBar.hide() : this.statusBar.show();
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
   }
-
-  // private saveTodayData() {
-
-  // }
 
   private presentToast(text) {
     let toast = this.toastCtrl.create({
@@ -214,7 +270,13 @@ export class TodayPage {
       .then(
         entry => {
           this.savedImageUrl = entry.toURL();
-          // this.presentToast(this.savedImageUrl);
+          this.nasaData.localUrl = normalizeURL(entry.toURL());
+          this.nasaData.imageLoaded = true;
+          this.imgUrl =
+            this.nasaData.localUrl === ""
+              ? this.nasaData.url
+              : this.nasaData.localUrl;
+          this.presentToast(this.nasaData.localUrl);
         },
         error => {
           // handle error

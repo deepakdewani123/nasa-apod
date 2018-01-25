@@ -31,8 +31,8 @@
 <ion-content fullscreen="true">
 
   <div *ngIf="!nasaData.imageLoaded" class="placeholder">
-    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.imageLoaded">
-    <img [src]="nasaData.url" (load)="nasaData.imageLoaded = true" [hidden]="!nasaData.imageLoaded" />
+    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" *ngIf="!nasaData.imageLoaded">
+    <!-- <img [src]="imgUrl" *ngIf="nasaData.imageLoaded" /> -->
     <!-- <p class="date_placeholder animated-background"></p> -->
     <!-- <p class="copyright_placeholder animated-background"></p>
     <h1 class="title_placeholder animated-background"></h1>
@@ -41,7 +41,7 @@
 
   <div *ngIf="nasaData.imageLoaded">
     <div class="today_image">
-      <img *ngIf="nasaData.imageLoaded" [src]="nasaData.url" (load)="nasaData.imageLoaded = true" (click)="openImageView()" />
+      <img *ngIf="nasaData.imageLoaded" [src]="imgUrl" (click)="openImageView()" />
     </div>
 
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->

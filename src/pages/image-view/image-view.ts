@@ -1,8 +1,16 @@
 import { NasaData } from "./../../app/model/data.model";
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  normalizeURL,
+  ToastController
+} from "ionic-angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { Platform } from "ionic-angular";
+import { File } from "@ionic-native/file";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
 import {
   trigger,
@@ -11,6 +19,8 @@ import {
   animate,
   transition
 } from "@angular/animations";
+
+declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -37,8 +47,8 @@ import {
 export class ImageViewPage {
   data: NasaData;
   imgUrl: string;
-  hdurl: string;
-  localUrl: string;
+  // hdurl: string;
+  // localUrl: string;
   loaded: boolean;
   isLandscape: boolean;
   type: string;
@@ -50,34 +60,19 @@ export class ImageViewPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private screenOrientation: ScreenOrientation,
-    private platform: Platform
+    private platform: Platform,
+    private file: File,
+    private transfer: FileTransfer,
+    private toastCtrl: ToastController
   ) {
     this.data = this.navParams.get("data");
 
     if (this.data) {
-      this.hdurl = this.data.hdurl;
-      this.localUrl = this.data.localUrl;
       this.todayDate = this.data.date;
       this.title = this.data.title;
-      this.imgUrl = this.data.localUrl === "" ? this.hdurl : this.localUrl;
+      this.imgUrl =
+        this.data.localHDUrl === "" ? this.data.hdurl : this.data.localHDUrl;
     }
-    // this.hdurl =
-    //   this.navParams.get("imageUrl") == null
-    //     ? ""
-    //     : this.navParams.get("imageUrl");
-
-    // this.localUrl =
-    //   this.navParams.get("localUrl") == null
-    //     ? ""
-    //     : this.navParams.get("localUrl");
-
-    // this.todayDate =
-    //   this.navParams.get("date") == null ? "" : this.navParams.get("date");
-
-    // this.title =
-    //   this.navParams.get("title") == null ? "" : this.navParams.get("title");
-
-    // this.imgUrl = this.localUrl === "" ? this.hdurl : this.localUrl;
 
     this.loaded = false;
     this.isLandscape = false;
@@ -90,6 +85,15 @@ export class ImageViewPage {
     setTimeout(() => {
       this.visibility = "hidden";
     }, 2000);
+
+    if (this.data.localHDUrl === "") {
+      this.download(this.data.hdurl);
+      this.presentToast("not download");
+    } else {
+      this.presentToast("download");
+      this.loaded = true;
+      this.imgUrl = this.data.localHDUrl;
+    }
     // allow user rotate
     this.platform.ready().then(() => {
       // this.screenOrientation.unlock();
@@ -125,5 +129,35 @@ export class ImageViewPage {
 
   dismiss() {
     this.navCtrl.pop();
+  }
+
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: "top"
+    });
+    toast.present();
+  }
+
+  private download(url: string) {
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer
+      .download(url, cordova.file.dataDirectory + this.todayDate + "jpg")
+      .then(
+        entry => {
+          // this.savedImageUrl = entry.toURL();
+          this.data.localHDUrl = normalizeURL(entry.toURL());
+          // this.data.imageLoaded = true;
+          this.loaded = true;
+          this.imgUrl =
+            this.data.localHDUrl === ""
+              ? this.data.hdurl
+              : this.data.localHDUrl;
+        },
+        error => {
+          // handle error
+        }
+      );
   }
 }

@@ -60,6 +60,7 @@ export class SearchResultPage {
   platformName: string;
   savedImageUrl: string;
   visibility: string;
+  imgUrl: string;
 
   constructor(
     private navCtrl: NavController,
@@ -81,12 +82,20 @@ export class SearchResultPage {
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
     this.visibility = "shown";
+    this.imgUrl = "";
   }
 
   ionViewDidLoad() {
     // this.storage.set("favArray", []);
     this.statusBar.hide();
-    this.saveData(this.nasaData);
+
+    if (this.nasaData.localUrl === "") {
+      this.download(this.nasaData.url);
+      this.presentToast("not saved");
+    } else {
+      this.imgUrl = this.nasaData.url;
+      this.presentToast("saved");
+    }
   }
 
   ionViewWillEnter() {}
@@ -94,18 +103,10 @@ export class SearchResultPage {
   private saveData(data: NasaData) {
     if (!data.isSaved) {
       this.storage.get("recentsArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isSaved = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("recentsArray", array);
-        } else {
-          array = [];
-          data.isSaved = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("recentsArray", array);
-        }
+        data.isSaved = true;
+        // data.localUrl = normalizeURL(this.savedImageUrl);
+        array.push(data);
+        this.storage.set("recentsArray", array);
       });
     }
   }
@@ -164,7 +165,6 @@ export class SearchResultPage {
         if (array) {
           data.isFav = true;
           data.localUrl = normalizeURL(this.savedImageUrl);
-          console.log(data.localUrl);
           array.push(data);
           this.storage.set("favArray", array);
         } else {
@@ -210,7 +210,14 @@ export class SearchResultPage {
       .then(
         entry => {
           this.savedImageUrl = entry.toURL();
-          // this.presentToast(this.savedImageUrl);
+          this.nasaData.localUrl = normalizeURL(entry.toURL());
+          this.nasaData.imageLoaded = true;
+          this.imgUrl =
+            this.nasaData.localUrl === ""
+              ? this.nasaData.url
+              : this.nasaData.localUrl;
+          this.saveData(this.nasaData);
+          this.presentToast(this.nasaData.localUrl);
         },
         error => {
           // handle error
