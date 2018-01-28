@@ -42,7 +42,7 @@ declare var cordova: any;
       state(
         "shown",
         style({
-          top: "0px"
+          top: "-1px"
         })
       ),
       state(
@@ -61,6 +61,8 @@ export class SearchResultPage {
   savedImageUrl: string;
   visibility: string;
   imgUrl: string;
+  imageShareUrl: string;
+  category: string;
 
   constructor(
     private navCtrl: NavController,
@@ -83,14 +85,15 @@ export class SearchResultPage {
     this.savedImageUrl = "";
     this.visibility = "shown";
     this.imgUrl = "";
+    this.imageShareUrl = "";
   }
 
   ionViewDidLoad() {
     // this.storage.set("favArray", []);
     this.statusBar.hide();
 
-    if (this.nasaData.localUrl === "") {
-      this.download(this.nasaData.url);
+    if (!this.nasaData.isSaved) {
+      this.download(this.nasaData.url, this.createFileName(this.nasaData.date));
       this.presentToast("not saved");
     } else {
       this.imgUrl = this.nasaData.url;
@@ -100,22 +103,12 @@ export class SearchResultPage {
 
   ionViewWillEnter() {}
 
-  private saveData(data: NasaData) {
-    if (!data.isSaved) {
-      this.storage.get("recentsArray").then((array: NasaData[]) => {
-        data.isSaved = true;
-        // data.localUrl = normalizeURL(this.savedImageUrl);
-        array.push(data);
-        this.storage.set("recentsArray", array);
-      });
-    }
-  }
-
   openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        data: this.nasaData
+        data: this.nasaData,
+        category: "recentsArray"
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -127,7 +120,7 @@ export class SearchResultPage {
 
   shareImage() {
     this.socialSharing
-      .share("", "", this.savedImageUrl.replace("file://", ""), "")
+      .share("", "", this.imageShareUrl.replace("file://", ""), "")
       .then(() => {
         console.log("success");
       })
@@ -158,33 +151,23 @@ export class SearchResultPage {
           }
           this.storage.set("favArray", array);
         }
-        // console.log(array);
       });
     } else {
       this.storage.get("favArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        } else {
-          // array: NasaData[] = [];
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        }
-        // console.log(array);
+        data.isFav = true;
+        data.localUrl = normalizeURL(this.savedImageUrl);
+        array.push(data);
+        this.storage.set("favArray", array);
       });
     }
   }
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(PopoverPage);
-    popover.present({
-      ev: myEvent
-    });
-  }
+  // presentPopover(myEvent) {
+  //   let popover = this.popoverCtrl.create(PopoverPage);
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
@@ -192,6 +175,16 @@ export class SearchResultPage {
 
   dismiss() {
     this.navCtrl.pop();
+  }
+
+  private saveData(data: NasaData) {
+    if (!data.isSaved) {
+      this.storage.get("recentsArray").then((array: NasaData[]) => {
+        data.isSaved = true;
+        array.push(data);
+        this.storage.set("recentsArray", array);
+      });
+    }
   }
 
   private presentToast(text) {
@@ -203,25 +196,25 @@ export class SearchResultPage {
     toast.present();
   }
 
-  private download(url: string) {
+  private createFileName(date: string) {
+    let newFileName = date + ".jpg";
+    this.nasaData.fileName = newFileName;
+    return newFileName;
+  }
+
+  private download(url: string, fileName: string) {
     const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer
-      .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
-      .then(
-        entry => {
-          this.savedImageUrl = entry.toURL();
-          this.nasaData.localUrl = normalizeURL(entry.toURL());
-          this.nasaData.imageLoaded = true;
-          this.imgUrl =
-            this.nasaData.localUrl === ""
-              ? this.nasaData.url
-              : this.nasaData.localUrl;
-          this.saveData(this.nasaData);
-          this.presentToast(this.nasaData.localUrl);
-        },
-        error => {
-          // handle error
-        }
-      );
+    fileTransfer.download(url, cordova.file.dataDirectory + fileName).then(
+      entry => {
+        this.imageShareUrl = entry.toURL();
+        this.savedImageUrl = entry.toURL();
+        this.nasaData.imageLoaded = true;
+        this.imgUrl = normalizeURL(entry.toURL());
+        this.saveData(this.nasaData);
+      },
+      error => {
+        // handle error
+      }
+    );
   }
 }

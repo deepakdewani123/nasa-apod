@@ -30,6 +30,7 @@ export class MyApp {
           this.storage.set("dataExists", true);
           this.storage.set("favArray", []);
           this.storage.set("recentsArray", []);
+          this.storage.set("todayData", {});
         }
       });
     });

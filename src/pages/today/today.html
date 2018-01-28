@@ -13,7 +13,7 @@
         <ion-icon class="fav_icon" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
       </button>
       <button ion-button icon-only (click)="picker.open()">
-        <ion-datetime #picker displayFormat=" " pickerFormat="YYYY MM DD" (ionChange)="search()" [(ngModel)]="date"></ion-datetime>
+        <ion-datetime #picker doneText="Go" displayFormat=" " pickerFormat="YYYY MM DD" (ionChange)="search()" [(ngModel)]="date"></ion-datetime>
         <ion-icon *ngIf="platformName === 'android'" class="fav_icon" icon-only color="light" name="calendar">
         </ion-icon>
         <ion-icon *ngIf="platformName === 'ios'" class="fav_icon" icon-only color="light" name="calendar-outline">

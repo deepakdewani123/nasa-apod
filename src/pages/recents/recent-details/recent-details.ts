@@ -42,7 +42,7 @@ declare var cordova: any;
       state(
         "shown",
         style({
-          top: "0px"
+          top: "-1px"
         })
       ),
       state(
@@ -60,6 +60,8 @@ export class RecentDetailsPage {
   platformName: string;
   savedImageUrl: string;
   visibility: string;
+  localDirectory: string;
+  category: string;
 
   constructor(
     private navCtrl: NavController,
@@ -78,20 +80,21 @@ export class RecentDetailsPage {
     private popoverCtrl: PopoverController
   ) {
     this.nasaData = this.navParams.get("data");
+    this.category = this.navParams.get("category");
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
     this.visibility = "shown";
+    this.localDirectory = this.dataService.getFileDirectory();
   }
 
-  ionViewDidLoad() {
-    console.log("ionViewDidLoad RecentDetailsPage");
-  }
+  ionViewDidLoad() {}
 
   openImageView() {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        data: this.nasaData
+        data: this.nasaData,
+        category: this.category
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -138,30 +141,20 @@ export class RecentDetailsPage {
       });
     } else {
       this.storage.get("favArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          console.log(data.localUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        } else {
-          // array: NasaData[] = [];
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        }
-        // console.log(array);
+        data.isFav = true;
+        data.localUrl = normalizeURL(this.savedImageUrl);
+        array.push(data);
+        this.storage.set("favArray", array);
       });
     }
   }
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(PopoverPage);
-    popover.present({
-      ev: myEvent
-    });
-  }
+  // presentPopover(myEvent) {
+  //   let popover = this.popoverCtrl.create(PopoverPage);
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
 
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";

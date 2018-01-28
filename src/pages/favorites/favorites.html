@@ -13,7 +13,7 @@
   <ion-card *ngFor="let item of data" (click)="openFavDetail(item)">
     <div class="parent_div">
       <div class="image_div">
-        <img class="image" [src]="item.localUrl" alt="no image here">
+        <img class="image" src="{{localDirectory + item.fileName}}" alt="no image here">
       </div>
       <!-- <div class="date_title_div"> -->
       <div class="date_div">

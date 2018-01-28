@@ -42,7 +42,7 @@ declare var cordova: any;
       state(
         "shown",
         style({
-          top: "0px"
+          top: "-1px"
         })
       ),
       state(
@@ -60,6 +60,8 @@ export class FavDetailPage {
   platformName: string;
   savedImageUrl: string;
   visibility: string;
+  localDirectory: string;
+  category: string;
 
   constructor(
     private navCtrl: NavController,
@@ -78,9 +80,11 @@ export class FavDetailPage {
     private popoverCtrl: PopoverController
   ) {
     this.nasaData = this.navParams.get("data");
+    this.category = this.navParams.get("category");
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
     this.visibility = "shown";
+    this.localDirectory = this.dataService.getFileDirectory();
   }
 
   ionViewDidLoad() {
@@ -91,7 +95,8 @@ export class FavDetailPage {
     let modal = this.modalCtrl.create(
       ImageViewPage,
       {
-        data: this.nasaData
+        data: this.nasaData,
+        category: this.category
       },
       {
         // enterAnimation: "modal-scale-up-enter",
@@ -138,20 +143,10 @@ export class FavDetailPage {
       });
     } else {
       this.storage.get("favArray").then((array: NasaData[]) => {
-        if (array) {
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          console.log(data.localUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        } else {
-          // array: NasaData[] = [];
-          data.isFav = true;
-          data.localUrl = normalizeURL(this.savedImageUrl);
-          array.push(data);
-          this.storage.set("favArray", array);
-        }
-        // console.log(array);
+        data.isFav = true;
+        data.localUrl = normalizeURL(this.savedImageUrl);
+        array.push(data);
+        this.storage.set("favArray", array);
       });
     }
   }
@@ -161,6 +156,14 @@ export class FavDetailPage {
     popover.present({
       ev: myEvent
     });
+  }
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: "top"
+    });
+    toast.present();
   }
 
   tapEvent(e) {

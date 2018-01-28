@@ -21,16 +21,32 @@ export class SettingsPage {
   }
 
   clearRecents() {
-    this.storage.set("recentsArray", []);
-    this.showAlert();
+    this.showConfirm();
+  }
+  clearFavorites() {
+    this.storage.set("favArray", []);
   }
 
-  showAlert() {
-    let alert = this.alertCtrl.create({
-      title: "All recents cleared!",
-      subTitle: "",
-      buttons: ["OK"]
+  showConfirm() {
+    let confirm = this.alertCtrl.create({
+      title: "Are you sure?",
+      message: "All you recents will be deleted",
+      buttons: [
+        {
+          text: "Cancel",
+          handler: () => {
+            console.log("Disagree clicked");
+          }
+        },
+        {
+          text: "OK",
+          handler: () => {
+            console.log("Agree clicked");
+            this.storage.set("recentsArray", []);
+          }
+        }
+      ]
     });
-    alert.present();
+    confirm.present();
   }
 }

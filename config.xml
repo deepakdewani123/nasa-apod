@@ -91,4 +91,5 @@
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />
     <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <engine name="ios" spec="4.5.4" />
+    <allow-navigation href="http://192.168.225.60:8100" />
 </widget>

@@ -11,6 +11,7 @@ import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { Platform } from "ionic-angular";
 import { File } from "@ionic-native/file";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
+import { DataService } from "../../app/services/data.service";
 
 import {
   trigger,
@@ -47,14 +48,14 @@ declare var cordova: any;
 export class ImageViewPage {
   data: NasaData;
   imgUrl: string;
-  // hdurl: string;
-  // localUrl: string;
-  loaded: boolean;
+  isLoading: boolean;
   isLandscape: boolean;
-  type: string;
-  todayDate: string;
-  title: string;
+  orientation: string;
+  category: string;
+  // todayDate: string;
+  // title: string;
   visibility: string;
+  localDirectory: string;
 
   constructor(
     public navCtrl: NavController,
@@ -63,37 +64,42 @@ export class ImageViewPage {
     private platform: Platform,
     private file: File,
     private transfer: FileTransfer,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private dataService: DataService
   ) {
     this.data = this.navParams.get("data");
 
-    if (this.data) {
-      this.todayDate = this.data.date;
-      this.title = this.data.title;
-      this.imgUrl =
-        this.data.localHDUrl === "" ? this.data.hdurl : this.data.localHDUrl;
-    }
-
-    this.loaded = false;
+    this.localDirectory = "";
+    // this.todayDate = this.data.date;
+    // this.title = this.data.title;
+    this.imgUrl = "";
+    this.isLoading = true;
     this.isLandscape = false;
-    this.type = "portrait";
+    this.orientation = "portrait";
     this.visibility = "shown";
   }
 
   ionViewDidLoad() {
-    console.log("ionViewDidLoad ImageViewPage");
+    this.category = this.navParams.get("category");
     setTimeout(() => {
       this.visibility = "hidden";
-    }, 2000);
+    }, 5000);
+    // console.log(this.data.hdFileName);
+    this.file
+      .checkFile(cordova.file.dataDirectory + "hdImages/", this.data.hdFileName)
+      .then(_ => {
+        this.presentToast("file exists");
+        this.isLoading = false;
+        this.imgUrl =
+          this.dataService.getFileDirectory() +
+          "hdImages/" +
+          this.data.hdFileName;
+      })
+      .catch(err => {
+        this.presentToast("file doesnt exist");
+        this.download(this.data.hdurl, this.createFileName(this.data.date));
+      });
 
-    if (this.data.localHDUrl === "") {
-      this.download(this.data.hdurl);
-      this.presentToast("not download");
-    } else {
-      this.presentToast("download");
-      this.loaded = true;
-      this.imgUrl = this.data.localHDUrl;
-    }
     // allow user rotate
     this.platform.ready().then(() => {
       // this.screenOrientation.unlock();
@@ -140,20 +146,31 @@ export class ImageViewPage {
     toast.present();
   }
 
-  private download(url: string) {
+  private createFileName(date: string) {
+    let newFileName = date + ".jpg";
+    return newFileName;
+  }
+
+  private download(url: string, fileName: string) {
+    const self = this;
     const fileTransfer: FileTransferObject = this.transfer.create();
+
+    // switch (category) {
+    //   case "favorites":
+    //   case "recents":
+    //   case "today":
+    //   default:
+    //     console.log("nothing");
+    // }
+
     fileTransfer
-      .download(url, cordova.file.dataDirectory + this.todayDate + "jpg")
+      .download(url, cordova.file.dataDirectory + "hdImages/" + fileName)
       .then(
         entry => {
-          // this.savedImageUrl = entry.toURL();
-          this.data.localHDUrl = normalizeURL(entry.toURL());
-          // this.data.imageLoaded = true;
-          this.loaded = true;
-          this.imgUrl =
-            this.data.localHDUrl === ""
-              ? this.data.hdurl
-              : this.data.localHDUrl;
+          this.data.hdFileName = fileName;
+          this.isLoading = false;
+          this.imgUrl = normalizeURL(entry.toURL());
+          this.dataService.updateData(self.category, this.data.date, fileName);
         },
         error => {
           // handle error

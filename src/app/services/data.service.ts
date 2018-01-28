@@ -1,8 +1,12 @@
 import { Injectable } from "@angular/core";
+import { normalizeURL, ToastController } from "ionic-angular";
 import { Headers, RequestOptions } from "@angular/http";
-// import { Observable } from "rxjs/Rx";
 import "rxjs/add/operator/map";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Storage } from "@ionic/storage";
+import { NasaData } from "../model/data.model";
+
+declare var cordova: any;
 
 interface DataResponse {
   title: string;
@@ -17,7 +21,11 @@ interface DataResponse {
 export class DataService {
   baseURL: string;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private storage: Storage,
+    private toastCtrl: ToastController
+  ) {
     this.baseURL = "https://api.nasa.gov/planetary/apod?";
   }
 
@@ -25,7 +33,7 @@ export class DataService {
     let url: string;
     url =
       this.baseURL +
-      "date=2017-01-12&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
+      "date=2018-01-16&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
 
     return this.http.get<DataResponse>(url).map(
       data => {
@@ -63,5 +71,38 @@ export class DataService {
         }
       }
     );
+  }
+
+  getFileDirectory() {
+    return normalizeURL(cordova.file.dataDirectory);
+  }
+
+  getData(from: string): Promise<NasaData[]> {
+    return this.storage.get(from).then((dataArray: NasaData[]) => {
+      return dataArray;
+    });
+  }
+
+  updateData(from: string, date: string, fileName: string) {
+    this.storage.get(from).then((dataArray: NasaData[]) => {
+      var index = dataArray.findIndex(function(object) {
+        return object.date === date;
+      });
+      if (index !== -1) {
+        dataArray[index].hdFileName = fileName;
+        this.storage.set(from, dataArray);
+      }
+    });
+  }
+
+  removeAllDirectories() {}
+
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: "top"
+    });
+    toast.present();
   }
 }

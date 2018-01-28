@@ -41,7 +41,8 @@
 
   <div *ngIf="nasaData.imageLoaded">
     <div class="today_image">
-      <img *ngIf="nasaData.imageLoaded" [src]="nasaData.url" (load)="nasaData.imageLoaded = true" (click)="openImageView()" />
+      <img *ngIf="nasaData.imageLoaded" src="{{localDirectory + nasaData.fileName}}" (load)="nasaData.imageLoaded = true" (click)="openImageView()"
+      />
     </div>
 
     <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->

@@ -1,13 +1,13 @@
 import {
   IonicPage,
-  NavController,
   NavParams,
   ModalController,
   Platform,
-  ToastController,
   normalizeURL,
   PopoverController
 } from "ionic-angular";
+
+import * as moment from "moment";
 
 import { Component } from "@angular/core";
 
@@ -16,7 +16,6 @@ import { DataService } from "../../app/services/data.service";
 import { NasaData } from "../../app/model/data.model";
 
 import { SearchResultPage } from "./../search-result/search-result";
-import { DatePicker } from "@ionic-native/date-picker";
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -66,18 +65,16 @@ export class TodayPage {
   visibility: string;
   date: string;
   imgUrl: string;
+  imageShareUrl: string;
 
   constructor(
-    private navCtrl: NavController,
     public navParams: NavParams,
     private dataService: DataService,
     private modalCtrl: ModalController,
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
     private statusBar: StatusBar,
-    private datePicker: DatePicker,
     private socialSharing: SocialSharing,
-    private toastCtrl: ToastController,
     private file: File,
     private filePath: FilePath,
     private transfer: FileTransfer,
@@ -90,28 +87,56 @@ export class TodayPage {
     this.visibility = "shown";
     this.date = "";
     this.imgUrl = "";
+    this.imageShareUrl = "";
   }
 
   ionViewDidLoad() {
-    // this.storage.set("favArray", []);
-    // console.log("ionViewDidLoad TodayPage");
     // this.statusBar.hide();
+
+    const todayDate = moment("2018-01-16").format("YYYY-MM-DD");
+    const currentHour = moment();
+    const startTime = moment().hour(11);
+
+    this.storage.get("todayData").then((data: NasaData) => {
+      if (data === {}) {
+        this.getTodayData();
+      } else {
+        this.storage.get("todayData").then((data: NasaData) => {
+          console.log(todayDate);
+          console.log(data.date);
+          if (currentHour.isAfter(startTime) && data.date !== todayDate) {
+            this.getTodayData();
+          } else {
+            this.nasaData = data;
+            this.imgUrl =
+              this.dataService.getFileDirectory() + this.nasaData.fileName;
+          }
+        });
+      }
+    });
+  }
+
+  getTodayData() {
+    console.log("get data");
     this.dataService.getTodayData().subscribe(
       result => {
         this.nasaData = new NasaData({
           title: result.title,
           explanation: result.explanation,
           date: result.date,
+          fileName: this.createFileName(result.date),
+          hdFileName: "",
           copyright: result.copyright,
           url: result.url,
           localHDUrl: "",
           hdurl: result.hdurl,
           imageLoaded: false,
-          isFav: false,
           isSaved: false,
+          hdImageLoaded: false,
+          isFav: false,
           localUrl: ""
         });
-        this.download(result.url);
+        this.download(result.url, this.createFileName(result.date));
       },
       error => {
         console.log(error);
@@ -120,11 +145,10 @@ export class TodayPage {
   }
 
   ionViewWillEnter() {
-    // console.log("ionViewWillEnter TodayPage");
     this.platform.ready().then(() => {
-      // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       // this.screenOrientation.lock(
-      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY
+      //   this.screenOrientation.ORIENTATIONS.PORTRAIT
       // );
       // this.screenOrientation.lock(
       //   this.screenOrientation.ORIENTATIONS.PORTRAIT_SECONDARY
@@ -163,13 +187,16 @@ export class TodayPage {
           title: result.title,
           explanation: result.explanation,
           date: result.date,
+          fileName: this.createFileName(result.date),
+          hdFileName: "",
           copyright: result.copyright,
           url: result.url,
           localHDUrl: "",
           hdurl: result.hdurl,
           imageLoaded: false,
-          isFav: false,
           isSaved: false,
+          hdImageLoaded: false,
+          isFav: false,
           localUrl: ""
         });
         this.navigateToSearchPage(this.searchData);
@@ -210,7 +237,7 @@ export class TodayPage {
 
   shareImage() {
     this.socialSharing
-      .share("", "", this.savedImageUrl.replace("file://", ""), "")
+      .share("", "", this.imageShareUrl.replace("file://", ""), "")
       .then(() => {
         console.log("success");
       })
@@ -254,33 +281,31 @@ export class TodayPage {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
   }
 
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
+  private createFileName(date: string) {
+    let newFileName = date + ".jpg";
+    this.nasaData.fileName = newFileName;
+    return newFileName;
   }
 
-  private download(url: string) {
+  private download(url: string, fileName: string) {
     const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer
-      .download(url, cordova.file.dataDirectory + this.nasaData.date + "jpg")
-      .then(
-        entry => {
-          this.savedImageUrl = entry.toURL();
-          this.nasaData.localUrl = normalizeURL(entry.toURL());
-          this.nasaData.imageLoaded = true;
-          this.imgUrl =
-            this.nasaData.localUrl === ""
-              ? this.nasaData.url
-              : this.nasaData.localUrl;
-          this.presentToast(this.nasaData.localUrl);
-        },
-        error => {
-          // handle error
-        }
-      );
+    fileTransfer.download(url, cordova.file.dataDirectory + fileName).then(
+      entry => {
+        this.nasaData.localUrl =
+          normalizeURL(cordova.file.dataDirectory) + fileName; // image URL to load local image
+
+        this.imageShareUrl =
+          cordova.file.dataDirectory + this.nasaData.fileName; // image URL to share to social media
+
+        this.nasaData.imageLoaded = true;
+
+        this.imgUrl = normalizeURL(entry.toURL());
+
+        this.storage.set("todayData", this.nasaData);
+      },
+      error => {
+        // handle error
+      }
+    );
   }
 }
