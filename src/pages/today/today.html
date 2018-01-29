@@ -13,7 +13,7 @@
         <ion-icon class="fav_icon" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
       </button>
       <button ion-button icon-only (click)="picker.open()">
-        <ion-datetime #picker doneText="Go" displayFormat=" " pickerFormat="YYYY MM DD" (ionChange)="search()" [(ngModel)]="date"></ion-datetime>
+        <ion-datetime #picker color="dark" doneText="Go" displayFormat=" " pickerFormat="YYYY MM DD" (ionChange)="search()" [(ngModel)]="date"></ion-datetime>
         <ion-icon *ngIf="platformName === 'android'" class="fav_icon" icon-only color="light" name="calendar">
         </ion-icon>
         <ion-icon *ngIf="platformName === 'ios'" class="fav_icon" icon-only color="light" name="calendar-outline">
@@ -32,22 +32,36 @@
 
 <ion-content fullscreen="true">
 
-  <div *ngIf="!nasaData.imageLoaded" class="placeholder">
-    <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.imageLoaded">
-    <img [src]="nasaData.url" (load)="nasaData.imageLoaded = true" [hidden]="!nasaData.imageLoaded" />
-    <!-- <p class="date_placeholder animated-background"></p> -->
-    <!-- <p class="copyright_placeholder animated-background"></p>
-    <h1 class="title_placeholder animated-background"></h1>
-    <p class="explanation_placeholder animated-background"></p> -->
+  <div *ngIf="!nasaData.imageLoaded" class="image_loading_div">
+    <ion-spinner name="crescent"></ion-spinner>
   </div>
+  <div class="today_image">
+    <img *ngIf="nasaData.imageLoaded" [src]="imgUrl" (click)="openImageView()" />
+  </div>
+  <div (tap)="tapEvent($event)">
+    <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>
+    <div class="copyright_parent">
+      <span *ngIf="nasaData.copyright !== ''" class="base">&#169;</span>
+      <p class="base copyright">
+        {{ nasaData.copyright }}
+      </p>
+    </div>
+    <h1 class="base title">{{ nasaData.title }}</h1>
+    <p class="base explanation">{{ nasaData.explanation }}</p>
+  </div>
+
+  <!-- <div *ngIf="!nasaData.imageLoaded" class="placeholder">
+    <div class="image_loading_div">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div> -->
+  <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.imageLoaded"> -->
+  <!-- </div> -->
   <!-- <iframe width="420" height="315" src="https://www.youtube.com/embed/YKzxmeABbkU?rel=0&showinfo=0">
   </iframe> -->
-  <div *ngIf="nasaData.imageLoaded">
+  <!-- <div *ngIf="nasaData.imageLoaded">
     <div class="today_image">
       <img *ngIf="nasaData.imageLoaded" [src]="imgUrl" (click)="openImageView()" />
     </div>
-    <!-- <img width="100%" height="150px" src="../../assets/imgs/spinner.gif" [hidden]="nasaData.loaded"> -->
-    <!-- <div class="animated-background"></div> -->
     <div (tap)="tapEvent($event)">
       <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>
       <div class="copyright_parent">
@@ -60,7 +74,7 @@
       <p class="base explanation">{{ nasaData.explanation }}</p>
     </div>
 
-  </div>
+  </div> -->
 
 
 

@@ -33,7 +33,7 @@ export class DataService {
     let url: string;
     url =
       this.baseURL +
-      "date=2018-01-16&api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
+      "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
 
     return this.http.get<DataResponse>(url).map(
       data => {

@@ -94,10 +94,8 @@ export class SearchResultPage {
 
     if (!this.nasaData.isSaved) {
       this.download(this.nasaData.url, this.createFileName(this.nasaData.date));
-      this.presentToast("not saved");
     } else {
       this.imgUrl = this.nasaData.url;
-      this.presentToast("saved");
     }
   }
 
@@ -187,14 +185,14 @@ export class SearchResultPage {
     }
   }
 
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
-  }
+  // private presentToast(text) {
+  //   let toast = this.toastCtrl.create({
+  //     message: text,
+  //     duration: 3000,
+  //     position: "top"
+  //   });
+  //   toast.present();
+  // }
 
   private createFileName(date: string) {
     let newFileName = date + ".jpg";

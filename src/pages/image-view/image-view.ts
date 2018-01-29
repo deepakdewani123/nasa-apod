@@ -52,8 +52,6 @@ export class ImageViewPage {
   isLandscape: boolean;
   orientation: string;
   category: string;
-  // todayDate: string;
-  // title: string;
   visibility: string;
   localDirectory: string;
 
@@ -68,10 +66,8 @@ export class ImageViewPage {
     private dataService: DataService
   ) {
     this.data = this.navParams.get("data");
-
+    this.category = this.navParams.get("category");
     this.localDirectory = "";
-    // this.todayDate = this.data.date;
-    // this.title = this.data.title;
     this.imgUrl = "";
     this.isLoading = true;
     this.isLandscape = false;
@@ -80,15 +76,28 @@ export class ImageViewPage {
   }
 
   ionViewDidLoad() {
-    this.category = this.navParams.get("category");
+    this.setupUI();
+  }
+
+  ionViewWillEnter() {
+    this.isLandscape = this.isPortrait();
+  }
+
+  setupUI() {
     setTimeout(() => {
       this.visibility = "hidden";
     }, 5000);
+
+    this.loadImage();
+    this.setupScreenOrientation();
+  }
+
+  loadImage() {
     // console.log(this.data.hdFileName);
     this.file
       .checkFile(cordova.file.dataDirectory + "hdImages/", this.data.hdFileName)
       .then(_ => {
-        this.presentToast("file exists");
+        // this.presentToast("file exists");
         this.isLoading = false;
         this.imgUrl =
           this.dataService.getFileDirectory() +
@@ -96,10 +105,12 @@ export class ImageViewPage {
           this.data.hdFileName;
       })
       .catch(err => {
-        this.presentToast("file doesnt exist");
-        this.download(this.data.hdurl, this.createFileName(this.data.date));
+        // this.presentToast("file doesnt exist");
+        this.download(this.data.hdurl, this.data.hdFileName);
       });
+  }
 
+  setupScreenOrientation() {
     // allow user rotate
     this.platform.ready().then(() => {
       // this.screenOrientation.unlock();
@@ -111,10 +122,6 @@ export class ImageViewPage {
         this.isLandscape = this.isPortrait();
       });
     });
-  }
-
-  ionViewWillEnter() {
-    this.isLandscape = this.isPortrait();
   }
 
   isPortrait(): boolean {
@@ -137,20 +144,6 @@ export class ImageViewPage {
     this.navCtrl.pop();
   }
 
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
-  }
-
-  private createFileName(date: string) {
-    let newFileName = date + ".jpg";
-    return newFileName;
-  }
-
   private download(url: string, fileName: string) {
     const self = this;
     const fileTransfer: FileTransferObject = this.transfer.create();
@@ -167,10 +160,10 @@ export class ImageViewPage {
       .download(url, cordova.file.dataDirectory + "hdImages/" + fileName)
       .then(
         entry => {
-          this.data.hdFileName = fileName;
+          // this.data.hdFileName = fileName;
           this.isLoading = false;
           this.imgUrl = normalizeURL(entry.toURL());
-          this.dataService.updateData(self.category, this.data.date, fileName);
+          // this.dataService.updateData(self.category, this.data.date, fileName);
         },
         error => {
           // handle error

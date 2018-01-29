@@ -10,7 +10,8 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "ionic:run": "ionic cordova run ios -l -c --target='iPhone-7'"
+    "ionic:run": "ionic cordova run ios -l -c --target='iPhone-7'",
+    "build:ios": "ionic cordova build ios"
   },
   "dependencies": {
     "@angular/animations": "^5.0.3",
