@@ -84,7 +84,7 @@ export class TodayPage {
     this.nasaData = new NasaData();
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
     this.savedImageUrl = "";
-    this.visibility = "hidden";
+    this.visibility = "shown";
     this.date = "";
     this.imgUrl = "";
     this.imageShareUrl = "";
@@ -99,7 +99,6 @@ export class TodayPage {
   }
 
   setupUI() {
-    this.statusBar.hide();
     // this.storage.set("todayData", new NasaData());
     this.loadData();
   }
@@ -110,18 +109,16 @@ export class TodayPage {
     const startTime = moment().hour(11);
 
     this.storage.get("todayData").then((data: NasaData) => {
-      if (data.title === "") {
+      if (!data.isImageDownloaded) {
         this.getTodayData();
       } else {
-        this.storage.get("todayData").then((data: NasaData) => {
-          if (currentHour.isAfter(startTime) && data.date !== todayDate) {
-            this.getTodayData();
-          } else {
-            this.nasaData = data;
-            this.imgUrl =
-              this.dataService.getFileDirectory() + this.nasaData.fileName;
-          }
-        });
+        if (currentHour.isAfter(startTime) && data.date !== todayDate) {
+          this.getTodayData();
+        } else {
+          this.nasaData = data;
+          this.imgUrl =
+            this.dataService.getFileDirectory() + this.nasaData.fileName;
+        }
       }
     });
   }
@@ -129,12 +126,6 @@ export class TodayPage {
   setupScreenOrientation() {
     this.platform.ready().then(() => {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-      // this.screenOrientation.lock(
-      //   this.screenOrientation.ORIENTATIONS.PORTRAIT
-      // );
-      // this.screenOrientation.lock(
-      //   this.screenOrientation.ORIENTATIONS.PORTRAIT_SECONDARY
-      // );
     });
   }
   search() {
@@ -265,6 +256,7 @@ export class TodayPage {
         if (index !== -1) {
           array.splice(index, 1);
         }
+        this.storage.set("todayData", data);
         this.storage.set("favArray", array);
       });
     } else {
@@ -272,6 +264,7 @@ export class TodayPage {
         data.isFav = true;
         // data.localUrl = normalizeURL(this.savedImageUrl);
         array.push(data);
+        this.storage.set("todayData", data);
         this.storage.set("favArray", array);
       });
     }
@@ -288,9 +281,12 @@ export class TodayPage {
     this.visibility === "shown" ? this.statusBar.hide() : this.statusBar.show();
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
 
-    setTimeout(() => {
-      this.visibility = "hidden";
-    }, 3000);
+    if (this.visibility === "shown") {
+      setTimeout(() => {
+        this.visibility = "hidden";
+        this.statusBar.hide();
+      }, 7000);
+    }
   }
 
   private createFileName(date: string) {
@@ -311,13 +307,16 @@ export class TodayPage {
           cordova.file.dataDirectory + this.nasaData.fileName; // image URL to share to social media
 
         this.nasaData.imageLoaded = true;
-
+        this.nasaData.isImageDownloaded = true;
         this.imgUrl = normalizeURL(entry.toURL());
 
         this.storage.set("todayData", this.nasaData);
       },
       error => {
         // handle error
+        this.dataService.presentToast(
+          "The image couldn't be downloaded. Please try again."
+        );
       }
     );
   }

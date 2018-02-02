@@ -1,13 +1,5 @@
 <ion-header [@visibility]='visibility'>
   <ion-navbar color="dark">
-    <!-- <ion-title>{{ nasaData.date | date: 'mediumDate' }}</ion-title> -->
-    <!-- <ion-buttons>
-      <button ion-button icon-only start>
-        <ion-icon *ngIf="platformName === 'ios' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share-outline"></ion-icon>
-        <ion-icon *ngIf="platformName === 'android' && nasaData.imageLoaded" class="share_icon" icon-only color="light" name="share"></ion-icon>
-      </button>
-    </ion-buttons> -->
-
     <ion-buttons start>
       <button ion-button icon-only (click)="favoriteData(nasaData)">
         <ion-icon class="fav_icon" icon-only color="light" name="{{nasaData.isFav ? 'heart' : 'heart-outline'}}"></ion-icon>
@@ -33,10 +25,13 @@
 <ion-content fullscreen="true">
 
   <div *ngIf="!nasaData.imageLoaded" class="image_loading_div">
-    <ion-spinner name="crescent"></ion-spinner>
+    <div class="spinner_div">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
-  <div class="today_image">
-    <img *ngIf="nasaData.imageLoaded" [src]="imgUrl" (click)="openImageView()" />
+
+  <div *ngIf="nasaData.imageLoaded" class="today_image">
+    <img [src]="imgUrl" (click)="openImageView()" />
   </div>
   <div (tap)="tapEvent($event)">
     <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>

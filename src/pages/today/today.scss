@@ -23,6 +23,30 @@ page-today {
       margin: 0px;
     }
 
+    .image_loading_div {
+      width: 100%;
+      height: 250px;
+      background: rgba(0, 0, 0, 0.363);
+      border: 1px solid rgba(255, 255, 255, 0.301);
+      text-align: center;
+      position: relative;
+      .spinner_div {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      ion-spinner * {
+        stroke: #fff;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
     @keyframes placeHolderShimmer {
       0% {
         background-position: -468px 0;
@@ -69,12 +93,6 @@ page-today {
     }
 
     .placeholder {
-      .image_loading_div {
-        width: 100%;
-        height: 200px;
-        background: black;
-        border: 1px solid rgba(255, 255, 255, 0.301);
-      }
       .date_placeholder {
         width: 70px;
         height: 10px;

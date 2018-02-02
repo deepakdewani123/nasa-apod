@@ -157,6 +157,7 @@ export class RecentDetailsPage {
   // }
 
   tapEvent(e) {
+    this.visibility === "shown" ? this.statusBar.hide() : this.statusBar.show();
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
   }
 }

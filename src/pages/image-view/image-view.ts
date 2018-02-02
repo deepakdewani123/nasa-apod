@@ -12,6 +12,7 @@ import { Platform } from "ionic-angular";
 import { File } from "@ionic-native/file";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { DataService } from "../../app/services/data.service";
+import { StatusBar } from "@ionic-native/status-bar";
 
 import {
   trigger,
@@ -60,6 +61,7 @@ export class ImageViewPage {
     public navParams: NavParams,
     private screenOrientation: ScreenOrientation,
     private platform: Platform,
+    private statusBar: StatusBar,
     private file: File,
     private transfer: FileTransfer,
     private toastCtrl: ToastController,
@@ -84,6 +86,7 @@ export class ImageViewPage {
   }
 
   setupUI() {
+    this.statusBar.hide();
     setTimeout(() => {
       this.visibility = "hidden";
     }, 5000);
@@ -93,11 +96,9 @@ export class ImageViewPage {
   }
 
   loadImage() {
-    // console.log(this.data.hdFileName);
     this.file
       .checkFile(cordova.file.dataDirectory + "hdImages/", this.data.hdFileName)
       .then(_ => {
-        // this.presentToast("file exists");
         this.isLoading = false;
         this.imgUrl =
           this.dataService.getFileDirectory() +
@@ -105,7 +106,6 @@ export class ImageViewPage {
           this.data.hdFileName;
       })
       .catch(err => {
-        // this.presentToast("file doesnt exist");
         this.download(this.data.hdurl, this.data.hdFileName);
       });
   }
@@ -113,7 +113,7 @@ export class ImageViewPage {
   setupScreenOrientation() {
     // allow user rotate
     this.platform.ready().then(() => {
-      // this.screenOrientation.unlock();
+      this.screenOrientation.unlock();
 
       // detect orientation changes
       this.screenOrientation.onChange().subscribe(() => {
@@ -142,6 +142,7 @@ export class ImageViewPage {
 
   dismiss() {
     this.navCtrl.pop();
+    this.statusBar.show();
   }
 
   private download(url: string, fileName: string) {
@@ -160,10 +161,8 @@ export class ImageViewPage {
       .download(url, cordova.file.dataDirectory + "hdImages/" + fileName)
       .then(
         entry => {
-          // this.data.hdFileName = fileName;
           this.isLoading = false;
           this.imgUrl = normalizeURL(entry.toURL());
-          // this.dataService.updateData(self.category, this.data.date, fileName);
         },
         error => {
           // handle error

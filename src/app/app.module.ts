@@ -27,6 +27,7 @@ import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 import { DatePicker } from "@ionic-native/date-picker";
+import { FlurryAnalytics } from "@ionic-native/flurry-analytics";
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { DatePicker } from "@ionic-native/date-picker";
     FileTransfer,
     FilePath,
     File,
+    FlurryAnalytics,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

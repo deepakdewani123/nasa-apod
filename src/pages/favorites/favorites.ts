@@ -8,10 +8,11 @@ import {
   ToastController
 } from "ionic-angular";
 
-import { ImageViewPage } from "./../image-view/image-view";
-
-import { NasaData } from "../../app/model/data.model";
+import { StatusBar } from "@ionic-native/status-bar";
 import { Storage } from "@ionic/storage";
+
+import { ImageViewPage } from "./../image-view/image-view";
+import { NasaData } from "../../app/model/data.model";
 import { FavDetailPage } from "./fav-detail/fav-detail";
 
 @IonicPage()
@@ -29,7 +30,8 @@ export class FavoritesPage {
     private storage: Storage,
     private modalCtrl: ModalController,
     private dataService: DataService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private statusBar: StatusBar
   ) {
     this.data = [];
     this.localDirectory = "";
@@ -39,6 +41,7 @@ export class FavoritesPage {
     console.log("ionViewDidLoad FavoritesPage");
   }
   ionViewWillEnter() {
+    this.statusBar.show();
     this.dataService.getData("favArray").then((dataArray: NasaData[]) => {
       this.data = dataArray;
     });

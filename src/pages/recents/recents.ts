@@ -1,3 +1,4 @@
+import { StatusBar } from "@ionic-native/status-bar";
 import { DataService } from "./../../app/services/data.service";
 import { RecentDetailsPage } from "./recent-details/recent-details";
 import { Component } from "@angular/core";
@@ -22,7 +23,8 @@ export class RecentsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private dataService: DataService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private statusBar: StatusBar
   ) {
     this.data = [];
     this.localDirectory = "";
@@ -31,6 +33,7 @@ export class RecentsPage {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
+    this.statusBar.show();
     this.dataService.getData("recentsArray").then((dataArray: NasaData[]) => {
       this.data = dataArray.sort().reverse();
     });

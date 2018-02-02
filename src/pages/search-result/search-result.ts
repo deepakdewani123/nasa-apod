@@ -89,9 +89,6 @@ export class SearchResultPage {
   }
 
   ionViewDidLoad() {
-    // this.storage.set("favArray", []);
-    this.statusBar.hide();
-
     if (!this.nasaData.isSaved) {
       this.download(this.nasaData.url, this.createFileName(this.nasaData.date));
     } else {
@@ -99,7 +96,13 @@ export class SearchResultPage {
     }
   }
 
-  ionViewWillEnter() {}
+  ionViewWillEnter() {
+    if (this.visibility === "hidden") {
+      this.dataService.presentToast(this.visibility);
+    } else {
+      this.dataService.presentToast(this.visibility);
+    }
+  }
 
   openImageView() {
     let modal = this.modalCtrl.create(

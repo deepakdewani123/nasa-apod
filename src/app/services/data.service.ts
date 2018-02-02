@@ -31,9 +31,7 @@ export class DataService {
 
   getTodayData() {
     let url: string;
-    url =
-      this.baseURL +
-      "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
+    url = this.baseURL + "api_key=FvuaAkgkbQNeHku21L2At5gpBmEm4hENxkNNNokg";
 
     return this.http.get<DataResponse>(url).map(
       data => {
@@ -97,7 +95,7 @@ export class DataService {
 
   removeAllDirectories() {}
 
-  private presentToast(text) {
+  presentToast(text) {
     let toast = this.toastCtrl.create({
       message: text,
       duration: 3000,
