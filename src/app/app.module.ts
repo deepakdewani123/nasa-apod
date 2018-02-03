@@ -18,6 +18,7 @@ import { DataService } from "../app/services/data.service";
 import { PopoverPage } from "../pages/popover/popover";
 import { FavDetailPage } from "../pages/favorites/fav-detail/fav-detail";
 import { RecentDetailsPage } from "../pages/recents/recent-details/recent-details";
+import { SplashPage } from "../pages/splash/splash";
 
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { SocialSharing } from "@ionic-native/social-sharing";
@@ -27,7 +28,8 @@ import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 import { DatePicker } from "@ionic-native/date-picker";
-import { FlurryAnalytics } from "@ionic-native/flurry-analytics";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { EmailComposer } from "@ionic-native/email-composer";
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { FlurryAnalytics } from "@ionic-native/flurry-analytics";
     SettingsPage,
     PopoverPage,
     SearchResultPage,
-    FavDetailPage
+    FavDetailPage,
+    SplashPage
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { FlurryAnalytics } from "@ionic-native/flurry-analytics";
     ImageViewPage,
     PopoverPage,
     SearchResultPage,
-    FavDetailPage
+    FavDetailPage,
+    SplashPage
   ],
   providers: [
     DatePicker,
@@ -76,7 +80,8 @@ import { FlurryAnalytics } from "@ionic-native/flurry-analytics";
     FileTransfer,
     FilePath,
     File,
-    FlurryAnalytics,
+    InAppBrowser,
+    EmailComposer,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

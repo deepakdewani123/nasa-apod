@@ -1,1 +1,1 @@
-npm run ionic:run
+npm run run:ios

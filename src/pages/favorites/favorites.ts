@@ -11,7 +11,7 @@ import {
 import { StatusBar } from "@ionic-native/status-bar";
 import { Storage } from "@ionic/storage";
 
-import { ImageViewPage } from "./../image-view/image-view";
+// import { ImageViewPage } from "./../image-view/image-view";
 import { NasaData } from "../../app/model/data.model";
 import { FavDetailPage } from "./fav-detail/fav-detail";
 

@@ -24,15 +24,33 @@
 
 <ion-content fullscreen="true">
 
-  <div *ngIf="!nasaData.imageLoaded" class="image_loading_div">
-    <div class="spinner_div">
-      <ion-spinner name="crescent"></ion-spinner>
+  <div *ngIf="nasaData.type === 'unknown'" class="not_supported">
+    <div class="content">
+      <p class="base">This format will be supported soon</p>
+      <button ion-button color="light" outline style="font-size: 12px;" (click)="openInBrowser(nasaData.url)">Go to APOD website</button>
     </div>
   </div>
 
-  <div *ngIf="nasaData.imageLoaded" class="today_image">
-    <img [src]="imgUrl" (click)="openImageView()" />
+  <div *ngIf="nasaData.type === 'jpg'" class="today_image">
+    <div *ngIf="nasaData.imageLoaded; else default">
+      <img [src]="imgUrl" (click)="openImageView()" />
+    </div>
+    <ng-template #default>
+      <div class="image_loading_div">
+        <div class="spinner_div">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+      </div>
+    </ng-template>
   </div>
+
+
+  <!-- <div *ngIf="!nasaData.imageLoaded" class="image_loading_div">
+    <div class="spinner_div">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </div> -->
+
   <div (tap)="tapEvent($event)">
     <p class="base date">{{ nasaData.date | date: 'mediumDate' }}</p>
     <div class="copyright_parent">

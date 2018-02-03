@@ -1,16 +1,16 @@
 import { Component } from "@angular/core";
-import { Platform } from "ionic-angular";
+import { Platform, ModalController } from "ionic-angular";
 import { TabsPage } from "../pages/tabs/tabs";
 import { Storage } from "@ionic/storage";
 
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
-import {
-  FlurryAnalytics,
-  FlurryAnalyticsObject,
-  FlurryAnalyticsOptions
-} from "@ionic-native/flurry-analytics";
 
+import { SplashPage } from "../pages/splash/splash";
+import { Config } from "ionic-angular";
+
+import { ModalScaleUpLeaveTransition } from "../transitions/scale-up-leave.transition";
+import { ModalScaleUpEnterTransition } from "../transitions/scale-up-enter.transition";
 @Component({
   templateUrl: "app.html"
 })
@@ -22,26 +22,39 @@ export class MyApp {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     private storage: Storage,
-    private flurryAnalytics: FlurryAnalytics
+    modalCtrl: ModalController,
+    public config: Config
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleLightContent();
-      splashScreen.hide();
+      // splashScreen.hide();
+      this.setCustomTransitions();
+      let splash = modalCtrl.create(
+        SplashPage,
+        {},
+        {
+          showBackdrop: false,
+          enableBackdropDismiss: false,
+          enterAnimation: "modal-scale-up-enter",
+          leaveAnimation: "modal-scale-up-leave"
+        }
+      );
+      splash.present();
+      // to be used later
+      // const options: FlurryAnalyticsOptions = {
+      //   appKey: "48CQ33PYBY5N8HDKK8ZN", // REQUIRED
+      //   reportSessionsOnClose: true,
+      //   enableLogging: true
+      // };
 
-      const options: FlurryAnalyticsOptions = {
-        appKey: "48CQ33PYBY5N8HDKK8ZN", // REQUIRED
-        reportSessionsOnClose: true,
-        enableLogging: true
-      };
+      // let fa: FlurryAnalyticsObject = this.flurryAnalytics.create(options);
 
-      let fa: FlurryAnalyticsObject = this.flurryAnalytics.create(options);
-
-      fa
-        .logEvent("create")
-        .then(() => console.log("Logged an event!"))
-        .catch(e => console.log("Error logging the event", e));
+      // fa
+      //   .logEvent("create")
+      //   .then(() => console.log("Logged an event!"))
+      //   .catch(e => console.log("Error logging the event", e));
 
       this.storage.get("dataExists").then(data => {
         if (data) {
@@ -54,5 +67,15 @@ export class MyApp {
         }
       });
     });
+  }
+  private setCustomTransitions() {
+    this.config.setTransition(
+      "modal-scale-up-leave",
+      ModalScaleUpLeaveTransition
+    );
+    this.config.setTransition(
+      "modal-scale-up-enter",
+      ModalScaleUpEnterTransition
+    );
   }
 }

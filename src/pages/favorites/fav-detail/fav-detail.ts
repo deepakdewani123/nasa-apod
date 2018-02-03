@@ -108,7 +108,12 @@ export class FavDetailPage {
 
   shareImage() {
     this.socialSharing
-      .share("", "", this.savedImageUrl.replace("file://", ""), "")
+      .share(
+        "",
+        "",
+        this.dataService.getFileDirectory() + this.nasaData.fileName,
+        ""
+      )
       .then(() => {
         console.log("success");
       })

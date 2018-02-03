@@ -97,11 +97,11 @@ export class SearchResultPage {
   }
 
   ionViewWillEnter() {
-    if (this.visibility === "hidden") {
-      this.dataService.presentToast(this.visibility);
-    } else {
-      this.dataService.presentToast(this.visibility);
-    }
+    // if (this.visibility === "hidden") {
+    //   this.statusBar.hide();
+    // } else {
+    //   this.statusBar.show();
+    // }
   }
 
   openImageView() {
@@ -121,7 +121,12 @@ export class SearchResultPage {
 
   shareImage() {
     this.socialSharing
-      .share("", "", this.imageShareUrl.replace("file://", ""), "")
+      .share(
+        "",
+        "",
+        this.dataService.getFileDirectory() + this.nasaData.fileName,
+        ""
+      )
       .then(() => {
         console.log("success");
       })
@@ -163,13 +168,6 @@ export class SearchResultPage {
     }
   }
 
-  // presentPopover(myEvent) {
-  //   let popover = this.popoverCtrl.create(PopoverPage);
-  //   popover.present({
-  //     ev: myEvent
-  //   });
-  // }
-
   tapEvent(e) {
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
   }
@@ -187,15 +185,6 @@ export class SearchResultPage {
       });
     }
   }
-
-  // private presentToast(text) {
-  //   let toast = this.toastCtrl.create({
-  //     message: text,
-  //     duration: 3000,
-  //     position: "top"
-  //   });
-  //   toast.present();
-  // }
 
   private createFileName(date: string) {
     let newFileName = date + ".jpg";

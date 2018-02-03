@@ -14,8 +14,9 @@ import { Component } from "@angular/core";
 import { ImageViewPage } from "./../image-view/image-view";
 import { DataService } from "../../app/services/data.service";
 import { NasaData } from "../../app/model/data.model";
-
+import { PopoverPage } from "../popover/popover";
 import { SearchResultPage } from "./../search-result/search-result";
+
 import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -23,7 +24,7 @@ import { SocialSharing } from "@ionic-native/social-sharing";
 import { File } from "@ionic-native/file";
 import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
-import { PopoverPage } from "../popover/popover";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 import {
   trigger,
@@ -79,7 +80,8 @@ export class TodayPage {
     private filePath: FilePath,
     private transfer: FileTransfer,
     private storage: Storage,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private iab: InAppBrowser
   ) {
     this.nasaData = new NasaData();
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
@@ -96,6 +98,11 @@ export class TodayPage {
 
   ionViewWillEnter() {
     this.setupScreenOrientation();
+    if (this.visibility === "hidden") {
+      this.statusBar.hide();
+    } else {
+      this.statusBar.show();
+    }
   }
 
   setupUI() {
@@ -169,14 +176,30 @@ export class TodayPage {
           isSaved: false,
           hdImageLoaded: false,
           isFav: false,
-          localUrl: ""
+          localUrl: "",
+          type: result.url.match(/youtube/) ? "unknown" : "jpg"
         });
-        this.download(result.url, this.nasaData.fileName);
+        // this.dataService.presentToast("type" + this.nasaData.type);
+
+        if (this.nasaData.type === "jpg") {
+          this.download(result.url, this.nasaData.fileName);
+        }
       },
       error => {
         console.log(error);
       }
     );
+  }
+
+  extension(url) {
+    // Remove everything to the last slash in URL
+    url = url.substr(1 + url.lastIndexOf("/"));
+
+    // Break URL at ? and take first part (file name, extension)
+    url = url.split(".")[0];
+
+    // Now we have only extension
+    return url;
   }
 
   getSearchData(date: string) {
@@ -196,7 +219,8 @@ export class TodayPage {
           isSaved: false,
           hdImageLoaded: false,
           isFav: false,
-          localUrl: ""
+          localUrl: "",
+          type: result.url.split(".").pop() === "jpg" ? "jpg" : "unknown"
         });
         this.navigateToSearchPage(this.searchData);
       },
@@ -237,7 +261,12 @@ export class TodayPage {
 
   shareImage() {
     this.socialSharing
-      .share("", "", this.imageShareUrl.replace("file://", ""), "")
+      .share(
+        "",
+        "",
+        this.dataService.getFileDirectory() + this.nasaData.fileName,
+        ""
+      )
       .then(() => {
         console.log("success");
       })
@@ -287,6 +316,10 @@ export class TodayPage {
         this.statusBar.hide();
       }, 7000);
     }
+  }
+
+  openInBrowser(url: string) {
+    this.iab.create(url);
   }
 
   private createFileName(date: string) {
