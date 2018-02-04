@@ -2,12 +2,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { DataService } from "./../../app/services/data.service";
 import { RecentDetailsPage } from "./recent-details/recent-details";
 import { Component } from "@angular/core";
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ToastController
-} from "ionic-angular";
+import { IonicPage, NavController } from "ionic-angular";
 
 import { NasaData } from "../../app/model/data.model";
 
@@ -21,9 +16,7 @@ export class RecentsPage {
   localDirectory: string;
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
     private dataService: DataService,
-    private toastCtrl: ToastController,
     private statusBar: StatusBar
   ) {
     this.data = [];

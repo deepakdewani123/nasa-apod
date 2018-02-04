@@ -5,9 +5,7 @@ import {
   NavParams,
   ModalController,
   Platform,
-  ToastController,
-  normalizeURL,
-  PopoverController
+  normalizeURL
 } from "ionic-angular";
 
 import { ImageViewPage } from "./../image-view/image-view";
@@ -18,10 +16,9 @@ import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { SocialSharing } from "@ionic-native/social-sharing";
-import { File } from "@ionic-native/file";
-import { FilePath } from "@ionic-native/file-path";
+// import { File } from "@ionic-native/file";
+// import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
-import { PopoverPage } from "../popover/popover";
 
 import {
   trigger,
@@ -73,12 +70,10 @@ export class SearchResultPage {
     private platform: Platform,
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
-    private toastCtrl: ToastController,
-    private file: File,
-    private filePath: FilePath,
+    // private file: File,
+    // private filePath: FilePath,
     private transfer: FileTransfer,
-    private storage: Storage,
-    private popoverCtrl: PopoverController
+    private storage: Storage
   ) {
     this.nasaData = this.navParams.get("data");
     this.platformName = this.platform.is("ios") === true ? "ios" : "android";
@@ -94,14 +89,18 @@ export class SearchResultPage {
     } else {
       this.imgUrl = this.nasaData.url;
     }
+
+    this.setupScreenOrientation();
   }
 
   ionViewWillEnter() {
-    // if (this.visibility === "hidden") {
-    //   this.statusBar.hide();
-    // } else {
-    //   this.statusBar.show();
-    // }
+    this.statusBar.show();
+  }
+
+  setupScreenOrientation() {
+    this.platform.ready().then(() => {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    });
   }
 
   openImageView() {
@@ -169,7 +168,15 @@ export class SearchResultPage {
   }
 
   tapEvent(e) {
+    this.visibility === "shown" ? this.statusBar.hide() : this.statusBar.show();
     this.visibility = this.visibility === "shown" ? "hidden" : "shown";
+
+    if (this.visibility === "shown") {
+      setTimeout(() => {
+        this.visibility = "hidden";
+        this.statusBar.hide();
+      }, 7000);
+    }
   }
 
   dismiss() {

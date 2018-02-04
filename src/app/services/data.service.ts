@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { normalizeURL, ToastController } from "ionic-angular";
-import { Headers, RequestOptions } from "@angular/http";
+// import { Headers, RequestOptions } from "@angular/http";
 import "rxjs/add/operator/map";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Storage } from "@ionic/storage";

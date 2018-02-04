@@ -4,8 +4,7 @@ import {
   IonicPage,
   NavController,
   NavParams,
-  normalizeURL,
-  ToastController
+  normalizeURL
 } from "ionic-angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { Platform } from "ionic-angular";
@@ -64,7 +63,6 @@ export class ImageViewPage {
     private statusBar: StatusBar,
     private file: File,
     private transfer: FileTransfer,
-    private toastCtrl: ToastController,
     private dataService: DataService
   ) {
     this.data = this.navParams.get("data");
@@ -146,7 +144,7 @@ export class ImageViewPage {
   }
 
   private download(url: string, fileName: string) {
-    const self = this;
+    // const self = this;
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     // switch (category) {

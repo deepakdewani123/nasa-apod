@@ -1,11 +1,9 @@
 import { Component } from "@angular/core";
 import {
   IonicPage,
-  NavController,
   NavParams,
   ModalController,
   Platform,
-  ToastController,
   normalizeURL,
   PopoverController
 } from "ionic-angular";
@@ -18,9 +16,6 @@ import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { SocialSharing } from "@ionic-native/social-sharing";
-import { File } from "@ionic-native/file";
-import { FilePath } from "@ionic-native/file-path";
-import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { PopoverPage } from "../../popover/popover";
 
 import {
@@ -31,7 +26,7 @@ import {
   transition
 } from "@angular/animations";
 
-declare var cordova: any;
+// declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -64,7 +59,6 @@ export class FavDetailPage {
   category: string;
 
   constructor(
-    private navCtrl: NavController,
     public navParams: NavParams,
     private dataService: DataService,
     private modalCtrl: ModalController,
@@ -72,10 +66,6 @@ export class FavDetailPage {
     private platform: Platform,
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
-    private toastCtrl: ToastController,
-    private file: File,
-    private filePath: FilePath,
-    private transfer: FileTransfer,
     private storage: Storage,
     private popoverCtrl: PopoverController
   ) {
@@ -89,6 +79,16 @@ export class FavDetailPage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FavDetailPage");
+  }
+
+  ionViewWillEnter() {
+    this.setupScreenOrientation();
+  }
+
+  setupScreenOrientation() {
+    this.platform.ready().then(() => {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    });
   }
 
   openImageView() {
@@ -161,14 +161,6 @@ export class FavDetailPage {
     popover.present({
       ev: myEvent
     });
-  }
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
   }
 
   tapEvent(e) {

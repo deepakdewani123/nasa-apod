@@ -1,3 +1,4 @@
+import { StatusBar } from "@ionic-native/status-bar";
 import { Component } from "@angular/core";
 import {
   IonicPage,
@@ -17,18 +18,22 @@ export class SplashPage {
     public viewCtrl: ViewController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public splashScreen: SplashScreen
+    public splashScreen: SplashScreen,
+    private statusBar: StatusBar
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad SplashPage");
+    // this.statusBar.hide();
   }
 
   ionViewWillEnter() {
+    console.log("will appear");
     this.splashScreen.hide();
+    this.statusBar.hide();
 
     setTimeout(() => {
       this.viewCtrl.dismiss();
-    }, 1700);
+    }, 1600);
   }
 }

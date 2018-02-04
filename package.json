@@ -39,7 +39,6 @@
     "@ionic/storage": "2.1.3",
     "cordova-android": "7.0.0",
     "cordova-ios": "4.5.4",
-    "cordova-plugin-cocoapod-support": "^1.3.0",
     "cordova-plugin-datepicker": "^0.9.3",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-email-composer": "^0.8.14",

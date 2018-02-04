@@ -1,3 +1,4 @@
+import { StatusBar } from "@ionic-native/status-bar";
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { Storage } from "@ionic/storage";
@@ -16,11 +17,16 @@ export class SettingsPage {
     public navParams: NavParams,
     private storage: Storage,
     private alertCtrl: AlertController,
-    private emailComposer: EmailComposer
+    private emailComposer: EmailComposer,
+    private statusBar: StatusBar
   ) {}
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad SettingsPage");
+  }
+
+  ionViewWillEnter() {
+    this.statusBar.show();
   }
 
   clearRecents() {

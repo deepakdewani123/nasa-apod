@@ -1,15 +1,9 @@
 import { DataService } from "./../../app/services/data.service";
 import { Component } from "@angular/core";
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ModalController,
-  ToastController
-} from "ionic-angular";
+import { IonicPage, NavController } from "ionic-angular";
 
 import { StatusBar } from "@ionic-native/status-bar";
-import { Storage } from "@ionic/storage";
+// import { Storage } from "@ionic/storage";
 
 // import { ImageViewPage } from "./../image-view/image-view";
 import { NasaData } from "../../app/model/data.model";
@@ -26,11 +20,7 @@ export class FavoritesPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
-    private storage: Storage,
-    private modalCtrl: ModalController,
     private dataService: DataService,
-    private toastCtrl: ToastController,
     private statusBar: StatusBar
   ) {
     this.data = [];
@@ -45,11 +35,6 @@ export class FavoritesPage {
     this.dataService.getData("favArray").then((dataArray: NasaData[]) => {
       this.data = dataArray;
     });
-    // this.storage.get("favArray").then((dataArray: NasaData[]) => {
-    //   if (dataArray) {
-    //     this.data = dataArray;
-    //   }
-    // });
     this.localDirectory = this.dataService.getFileDirectory();
   }
 
@@ -58,14 +43,5 @@ export class FavoritesPage {
       data: item,
       category: "favArray"
     });
-  }
-
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: "top"
-    });
-    toast.present();
   }
 }

@@ -11,37 +11,32 @@ import { Config } from "ionic-angular";
 
 import { ModalScaleUpLeaveTransition } from "../transitions/scale-up-leave.transition";
 import { ModalScaleUpEnterTransition } from "../transitions/scale-up-enter.transition";
+import { NasaData } from "./model/data.model";
 @Component({
   templateUrl: "app.html"
 })
 export class MyApp {
-  rootPage: any = TabsPage;
+  rootPage: any;
 
   constructor(
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     private storage: Storage,
-    modalCtrl: ModalController,
+    private modalCtrl: ModalController,
     public config: Config
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+      console.log("before setup data");
+      this.setupData();
+      console.log("after setup data");
       statusBar.styleLightContent();
       // splashScreen.hide();
       this.setCustomTransitions();
-      let splash = modalCtrl.create(
-        SplashPage,
-        {},
-        {
-          showBackdrop: false,
-          enableBackdropDismiss: false,
-          enterAnimation: "modal-scale-up-enter",
-          leaveAnimation: "modal-scale-up-leave"
-        }
-      );
-      splash.present();
+
       // to be used later
       // const options: FlurryAnalyticsOptions = {
       //   appKey: "48CQ33PYBY5N8HDKK8ZN", // REQUIRED
@@ -56,16 +51,39 @@ export class MyApp {
       //   .then(() => console.log("Logged an event!"))
       //   .catch(e => console.log("Error logging the event", e));
 
-      this.storage.get("dataExists").then(data => {
-        if (data) {
-          console.log("data exists");
-        } else {
-          this.storage.set("dataExists", true);
-          this.storage.set("favArray", []);
-          this.storage.set("recentsArray", []);
-          this.storage.set("todayData", {});
-        }
-      });
+      // this.presentSplash();
+    });
+  }
+
+  private presentSplash() {
+    let splash = this.modalCtrl.create(
+      SplashPage,
+      {},
+      {
+        showBackdrop: false,
+        enableBackdropDismiss: false,
+        enterAnimation: "modal-scale-up-enter",
+        leaveAnimation: "modal-scale-up-leave"
+      }
+    );
+    splash.present();
+  }
+
+  private setupData() {
+    this.storage.get("dataExists").then(data => {
+      if (data) {
+        console.log("data exists");
+        this.presentSplash();
+        this.rootPage = TabsPage;
+      } else {
+        console.log("data doesnt exists");
+        this.presentSplash();
+        this.rootPage = TabsPage;
+        this.storage.set("dataExists", true);
+        this.storage.set("favArray", new Array<NasaData>());
+        this.storage.set("recentsArray", new Array<NasaData>());
+        this.storage.set("todayData", new NasaData());
+      }
     });
   }
   private setCustomTransitions() {

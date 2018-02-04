@@ -21,8 +21,8 @@ import { Storage } from "@ionic/storage";
 import { StatusBar } from "@ionic-native/status-bar";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { SocialSharing } from "@ionic-native/social-sharing";
-import { File } from "@ionic-native/file";
-import { FilePath } from "@ionic-native/file-path";
+// import { File } from "@ionic-native/file";
+// import { FilePath } from "@ionic-native/file-path";
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 
@@ -76,8 +76,8 @@ export class TodayPage {
     private platform: Platform,
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
-    private file: File,
-    private filePath: FilePath,
+    // private file: File,
+    // // private filePath: FilePath,
     private transfer: FileTransfer,
     private storage: Storage,
     private popoverCtrl: PopoverController,
@@ -111,11 +111,14 @@ export class TodayPage {
   }
 
   loadData() {
+    console.log("load data");
     const todayDate = moment().format("YYYY-MM-DD");
     const currentHour = moment();
     const startTime = moment().hour(11);
 
     this.storage.get("todayData").then((data: NasaData) => {
+      console.log("image download:" + data.isFav);
+
       if (!data.isImageDownloaded) {
         this.getTodayData();
       } else {

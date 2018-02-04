@@ -1,17 +1,15 @@
 import { SearchResultPage } from "./../search-result/search-result";
 import { NasaData } from "./../../app/model/data.model";
-import { Component, ViewChild, ElementRef } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   IonicPage,
   NavController,
   NavParams,
   ViewController,
-  ModalController,
-  normalizeURL
+  ModalController
 } from "ionic-angular";
 
 import { DataService } from "../../app/services/data.service";
-import { ImageViewPage } from "./../image-view/image-view";
 import { Storage } from "@ionic/storage";
 
 @IonicPage()
